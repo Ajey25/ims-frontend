@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,7 +14,7 @@ const Login = () => {
 
     try {
       const response = await fetch(
-        "`${import.meta.env.VITE_API_BASE_URL}/userMaster/login`",
+        `${import.meta.env.VITE_API_BASE_URL}/userMaster/login`,
         {
           method: "POST",
           headers: {
