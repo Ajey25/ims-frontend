@@ -31,9 +31,12 @@ const UserMaster = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5001/api/userMaster", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/userMaster`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setUsers(response.data || []);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -44,9 +47,13 @@ const UserMaster = () => {
   const handleAddUser = async (newUser) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5001/api/userMaster", newUser, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/userMaster`,
+        newUser,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       fetchUsers();
       setShowEditForm(false);
       toast.success("User added successfully");
@@ -60,7 +67,7 @@ const UserMaster = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5001/api/userMaster/${updatedUser.id}`,
+        `${import.meta.env.VITE_API_BASE_URL}/userMaster/${updatedUser.id}`,
         updatedUser,
         { headers: { Authorization: `Bearer ${token}` } }
       );
