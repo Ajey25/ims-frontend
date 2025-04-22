@@ -24,7 +24,7 @@ const PaymentEditModal = ({ onSave, onClose }) => {
     const fetchCustomers = async () => {
       try {
         const response = await axios.get(
-          "`${import.meta.env.VITE_API_BASE_URL}/customerMaster"
+          `${import.meta.env.VITE_API_BASE_URL}/customerMaster`
         );
         setCustomers(response.data);
       } catch (error) {
@@ -40,7 +40,9 @@ const PaymentEditModal = ({ onSave, onClose }) => {
       const fetchReturns = async () => {
         try {
           const response = await axios.get(
-            `${import.meta.env.VITE_API_BASE_URL}/payment/customer-returns/${selectedCustomer.id}`
+            `${import.meta.env.VITE_API_BASE_URL}/payment/customer-returns/${
+              selectedCustomer.id
+            }`
           );
           const customerReturns = response.data;
           const initializedReturns = customerReturns.map((ret) => ({
