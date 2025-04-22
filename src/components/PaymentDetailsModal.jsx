@@ -16,7 +16,7 @@ const PaymentDetails = ({ payment, onClose }) => {
   const fetchCustomerName = async (customerId) => {
     try {
       const response = await axios.get(
-        `http://localhost:5001/api/customerMaster/${customerId}`
+        `${import.meta.env.VITE_API_BASE_URL}customerMaster/${customerId}`
       );
       setCustomerName(response.data.customerName);
     } catch (error) {

@@ -8,7 +8,7 @@ import YellowTick from "../../assets/warning.png";
 import { toast } from "react-toastify";
 import Pagination from "../../components/Pagination";
 
-const API_URL = "http://localhost:5001/api/payment";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/payment`;
 
 const Payment = () => {
   const [payments, setPayments] = useState([]);
@@ -43,7 +43,7 @@ const Payment = () => {
   const fetchCustomers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5001/api/customerMaster"
+        `${import.meta.env.VITE_API_BASE_URL}/customerMaster`
       );
       const customerMap = {};
       response.data.forEach((customer) => {

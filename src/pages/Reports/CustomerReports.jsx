@@ -21,7 +21,7 @@ const Reports = () => {
   useEffect(() => {
     // Fetch Customers
     axios
-      .get("http://localhost:5001/api/customerMaster")
+      .get(`${import.meta.env.VITE_API_BASE_URL}/customerMaster`)
       .then((res) => {
         setCustomers(res.data);
       })
@@ -29,13 +29,13 @@ const Reports = () => {
 
     // Fetch OnRent Data
     axios
-      .get("http://localhost:5001/api/onrent")
+      .get(`${import.meta.env.VITE_API_BASE_URL}/onrent`)
       .then((res) => setOnRentData(res.data))
       .catch((err) => console.error("Error fetching onrent data:", err));
 
     // Fetch Payment Data
     axios
-      .get("http://localhost:5001/api/payment")
+      .get(`${import.meta.env.VITE_API_BASE_URL}/payment`)
       .then((res) => setPaymentData(res.data))
       .catch((err) => console.error("Error fetching payments data:", err));
   }, []);
@@ -209,7 +209,7 @@ const Reports = () => {
       const pdfData = doc.output("datauristring");
 
       // Send PDF data to backend
-      await axios.post("http://localhost:5001/api/report/send-report", {
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/report/send-report`, {
         customerId: selectedCustomerId, // Send the selected customer ID
         pdfBase64: pdfData, // Base64 string of the PDF
         customerName: selectedCustomer, // Send the customer name
@@ -425,7 +425,7 @@ const Reports = () => {
                               }
 
                               const onRentNo = record.onRentNo; // Fallback in case function fails
-                              const url = `http://localhost:5173/app/transactions/onrent?onRentNo=${onRentNo}`;
+                              const url = `${import.meta.env.VITE_API_BASE_URL}/app/transactions/onrent?onRentNo=${onRentNo}`;
 
                               window.open(url, "_blank");
                             }}

@@ -10,7 +10,7 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5001/api/uom")
+      .get(`${import.meta.env.VITE_API_BASE_URL}/uom`)
       .then((res) => setUoms(res.data))
       .catch((err) => console.error("UOM fetch failed", err));
   }, []);
@@ -22,7 +22,9 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
   useEffect(() => {
     const fetchOnRentData = async () => {
       try {
-        const response = await axios.get("http://localhost:5001/api/onRent");
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/onRent`
+        );
         setOnRentData(response.data);
       } catch (error) {
         console.error("Error fetching onRent data:", error);
@@ -183,7 +185,9 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
                         textDecoration: "underline",
                       }}
                       onClick={() => {
-                        const url = `http://localhost:5173/app/transactions/onrent?onRentNo=${getOnRentNo(
+                        const url = `${
+                          import.meta.env.VITE_API_BASE_URL
+                        }/app/transactions/onrent?onRentNo=${getOnRentNo(
                           item.onRentNo
                         )}`;
                         window.open(url, "_blank");
