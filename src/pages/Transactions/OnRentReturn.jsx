@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import Pagination from "../../components/Pagination";
 import { useSearchParams } from "react-router-dom";
 
-const API_URL = "http://localhost:5001/api/onrentreturn";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/onrentreturn`;
 
 const OnRentReturn = () => {
   const [searchParams] = useSearchParams();
