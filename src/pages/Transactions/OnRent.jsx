@@ -9,7 +9,7 @@ import Pagination from "../../components/Pagination";
 import { useSearchParams } from "react-router-dom";
 import { select } from "framer-motion/client";
 
-const API_URL = "http://localhost:5001/api/onrent";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/onrent`;
 
 const OnRent = () => {
   const [searchParams] = useSearchParams();
@@ -58,7 +58,7 @@ const OnRent = () => {
     const fetchCustomers = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/customerMaster`
+          `${import.meta.env.VITE_API_BASE_URL}/customerMaster`
         );
         setCustomerOptions(response.data);
       } catch (error) {
@@ -144,7 +144,9 @@ const OnRent = () => {
           if (!itemName) {
             try {
               const itemResponse = await axios.get(
-                `http://localhost:5001/api/itemMaster/${item.item_id}`
+                `${import.meta.env.VITE_API_BASE_URL}/itemMaster/${
+                  item.item_id
+                }`
               );
               itemName = itemResponse.data.itemName;
             } catch (err) {
@@ -228,7 +230,7 @@ const OnRent = () => {
   const handleToggleStatus = async (onrentId) => {
     try {
       const response = await fetch(
-        `http://localhost:5001/api/onrent/toggle/${onrentId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/onrent/toggle/${onrentId}`,
         { method: "PUT" }
       );
 

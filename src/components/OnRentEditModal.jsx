@@ -36,10 +36,10 @@ const OnRentEditModal = ({ onRent, onSave, onClose }) => {
       try {
         const [itemResponse, stockResponse, uomResponse, customerResponse] =
           await Promise.all([
-            axios.get("http://localhost:5001/api/itemMaster"),
-            axios.get("http://localhost:5001/api/stockMaster"),
-            axios.get("http://localhost:5001/api/uom"),
-            axios.get("http://localhost:5001/api/customerMaster"),
+            axios.get(`${import.meta.env.VITE_API_BASE_URL}/itemMaster`),
+            axios.get(`${import.meta.env.VITE_API_BASE_URL}/stockMaster`),
+            axios.get(`${import.meta.env.VITE_API_BASE_URL}/uom`),
+            axios.get(`${import.meta.env.VITE_API_BASE_URL}/customerMaster`),
           ]);
 
         setItemOptions(itemResponse.data);
