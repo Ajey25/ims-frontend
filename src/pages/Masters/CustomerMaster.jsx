@@ -32,7 +32,9 @@ const CustomerMaster = () => {
   // 📌 Fetch customers from API
   const fetchCustomers = async () => {
     try {
-      const response = await fetch("http://localhost:5001/api/customerMaster");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/customerMaster`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch customers");
       }
@@ -51,14 +53,17 @@ const CustomerMaster = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:5001/api/customerMaster", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newCustomer),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/customerMaster`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newCustomer),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to add customer");
@@ -81,7 +86,8 @@ const CustomerMaster = () => {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5001/api/customerMaster/${customerId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/customerMaster/${customerId}`,
+
         {
           method: "PUT",
           headers: {
@@ -111,7 +117,7 @@ const CustomerMaster = () => {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5001/api/customerMaster/${customerId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/customerMaster/${customerId}`,
         {
           method: "DELETE",
         }
@@ -131,7 +137,9 @@ const CustomerMaster = () => {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5001/api/customerMaster/${customerId}/toggle-status`,
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/customerMaster/${customerId}/toggle-status`,
 
         {
           method: "PATCH",
