@@ -6,7 +6,7 @@ const ItemDetailsPopup = ({ item, onClose }) => {
 
   return (
     <div className="container mt-4">
-      <div className="d-flex justify-content-between mb-3">
+      <div className="d-flex  justify-content-between mb-3">
         <h3>Item Details</h3>
         <button className="btn btn-outline-secondary" onClick={onClose}>
           Back to List

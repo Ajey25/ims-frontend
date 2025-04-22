@@ -182,7 +182,7 @@ const ItemMaster = () => {
   }
 
   return (
-    <div className="responsive-container">
+    <div className="responsive-container px-0">
       <div className="d-flex justify-content-between align-items-center mb-2">
         <h4>Item Master</h4>
         <button
