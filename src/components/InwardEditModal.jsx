@@ -30,10 +30,12 @@ const InwardEditModal = ({ inward, onSave, onClose }) => {
     const fetchData = async () => {
       try {
         const itemResponse = await axios.get(
-          "http://localhost:5001/api/itemMaster"
+          `${import.meta.env.VITE_API_BASE_URL}/itemMaster`
         );
         setItemOptions(itemResponse.data);
-        const uomResponse = await axios.get("http://localhost:5001/api/uom");
+        const uomResponse = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/uom`
+        );
         setUomOptions(uomResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
