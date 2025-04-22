@@ -452,7 +452,7 @@ const OnRentEditModal = ({ onRent, onSave, onClose }) => {
                   placeholder="Search Items..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border-0 shadow-none py-1 px-2"
+                  className="border-0 shadow-none py-1 px-2 "
                   style={{
                     backgroundColor: "transparent",
                     outline: "none",
@@ -464,14 +464,14 @@ const OnRentEditModal = ({ onRent, onSave, onClose }) => {
                 {/* Select All */}
                 <div className="form-check py-1">
                   <input
-                    className="form-check-input custom-checkbox"
+                    className="form-check-input custom-checkbox border-1 border-primary"
                     type="checkbox"
                     id="selectAll"
                     checked={selectAll}
                     onChange={handleSelectAll}
                   />
                   <label
-                    className="form-check-label w-100"
+                    className="form-check-label w-100 "
                     htmlFor="selectAll"
                     style={{ cursor: "pointer" }}
                   >
@@ -496,7 +496,7 @@ const OnRentEditModal = ({ onRent, onSave, onClose }) => {
                   {filteredItemOptions.map((item) => (
                     <div className="form-check py-1" key={item.id}>
                       <input
-                        className="form-check-input custom-checkbox"
+                        className="form-check-input custom-checkbox border-1 border-primary"
                         type="checkbox"
                         id={`item-${item.id}`}
                         checked={!!selectedItems[item.id]}
@@ -524,7 +524,7 @@ const OnRentEditModal = ({ onRent, onSave, onClose }) => {
           <div className="mb-3">
             <h5>Selected Items</h5>
             <div className="table-responsive">
-              <table className="table table-bordered">
+              <table className="table  table-sm table-bordered">
                 <thead className="table-light">
                   <tr>
                     <th>Item Name</th>

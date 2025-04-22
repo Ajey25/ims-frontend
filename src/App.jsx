@@ -11,6 +11,7 @@ import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import ItemMaster from "./pages/Masters/ItemMaster";
 import CustomerMaster from "./pages/Masters/CustomerMaster";
+import StockMaster from "./pages/Masters/StockMaster";
 import UserMaster from "./pages/Masters/UserMaster";
 import Inward from "./pages/Transactions/Inward";
 import OnRentReturn from "./pages/Transactions/OnRentReturn";
@@ -55,6 +56,7 @@ const App = () => {
               element={<CustomerMaster />}
             />
             <Route path="masters/usermaster" element={<UserMaster />} />
+            <Route path="masters/stockmaster" element={<StockMaster />} />
 
             {/* Transactions routes */}
             <Route path="transactions/inward" element={<Inward />} />

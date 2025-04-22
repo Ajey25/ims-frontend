@@ -445,7 +445,7 @@ const InwardEditModal = ({ inward, onSave, onClose }) => {
 
                 <div className="form-check mb-2">
                   <input
-                    className="form-check-input custom-checkbox"
+                    className="form-check-input custom-checkbox border-1 border-primary"
                     type="checkbox"
                     id="selectAll"
                     checked={selectAll}
@@ -465,7 +465,7 @@ const InwardEditModal = ({ inward, onSave, onClose }) => {
                 {filteredItemOptions.map((item) => (
                   <div className="form-check" key={item.id}>
                     <input
-                      className="form-check-input custom-checkbox"
+                      className="form-check-input custom-checkbox border-1 border-primary"
                       type="checkbox"
                       id={`item-${item.id}`}
                       checked={!!selectedItems[item.id]}

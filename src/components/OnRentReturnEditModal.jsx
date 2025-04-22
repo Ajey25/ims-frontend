@@ -503,7 +503,6 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose }) => {
     const currentUom = uomOptions.find((u) => u.uom === uomLabel);
     const currentUomId = currentUom?.id || "";
 
-
     return (
       <Form.Select
         size="sm"
@@ -827,7 +826,7 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose }) => {
                     )
                   }
                   onChange={handleSelectAllItems} // Ensure all items are selected/deselected
-                  className="py-1"
+                  className="py-1 custom-checkbox-blue"
                 />
                 <hr className="my-1" />
 
@@ -850,7 +849,9 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose }) => {
                         type="checkbox"
                         label={
                           <span
-                            style={{ cursor: "pointer" }}
+                            style={{
+                              cursor: "pointer",
+                            }}
                             onClick={() => handleItemSelect(item.itemId)} // Ensure click toggles selection
                           >
                             {item.itemName}
@@ -860,7 +861,7 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose }) => {
                           (selectedItem) => selectedItem.itemId === item.itemId
                         )}
                         onChange={() => handleItemSelect(item.itemId)} // Ensure change is handled
-                        className="py-1"
+                        className="py-1 custom-checkbox-blue"
                       />
                     ))
                   ) : (
@@ -916,7 +917,7 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose }) => {
                     )
                   }
                   onChange={handleSelectAllOnRentRefs}
-                  className="py-1"
+                  className="py-1 custom-checkbox-blue"
                   label="Select All"
                 />
 
@@ -939,7 +940,7 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose }) => {
                           id={checkboxId}
                           checked={selectedOnRentRefs.includes(rentId)}
                           onChange={() => handleOnRentSelect(rentId)}
-                          className="mb-1"
+                          className="mb-1 custom-checkbox-blue"
                           label={labelText}
                         />
                       );
@@ -965,7 +966,7 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose }) => {
           <div className="mb-3">
             <h5>Selected Items</h5>
             <div className="table-responsive">
-              <table className="table table-bordered">
+              <table className="table table-sm table-bordered">
                 <thead className="table-light">
                   <tr>
                     <th>On Rent No</th>

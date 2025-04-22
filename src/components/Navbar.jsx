@@ -41,6 +41,8 @@ const Navbar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
           return "Customer Master";
         case "/app/masters/usermaster":
           return "User Master";
+        case "/app/masters/stockmaster":
+          return "Stock Master";
         case "/app/transactions/inward":
           return "Inward";
         case "/app/transactions/onrent":

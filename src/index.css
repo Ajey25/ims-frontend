@@ -190,3 +190,12 @@
   transform: rotate(45deg);
 }
 */
+.custom-checkbox-blue input[type="checkbox"] {
+  border: 2px solid #0d6efd; /* Bootstrap primary blue */
+  border-radius: 0.25rem;
+}
+
+.custom-checkbox-blue input[type="checkbox"]:checked {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
