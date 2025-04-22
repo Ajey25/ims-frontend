@@ -185,9 +185,7 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
                         textDecoration: "underline",
                       }}
                       onClick={() => {
-                        const url = `${
-                          import.meta.env.VITE_API_BASE_URL
-                        }/app/transactions/onrent?onRentNo=${getOnRentNo(
+                        const url = `http://localhost:5173/app/transactions/onrent?onRentNo=${getOnRentNo(
                           item.onRentNo
                         )}`;
                         window.open(url, "_blank");
