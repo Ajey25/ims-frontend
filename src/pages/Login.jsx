@@ -15,7 +15,7 @@ const Login = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5001/api/userMaster/login",
+        "https://ims-backend-production-3057.up.railway.app/api/userMaster/login",
         {
           method: "POST",
           headers: {
