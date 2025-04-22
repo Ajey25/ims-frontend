@@ -36,7 +36,9 @@ const ItemMaster = () => {
 
   const fetchItems = async () => {
     try {
-      const response = await fetch("http://localhost:5001/api/itemMaster");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/itemMaster`
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -50,14 +52,17 @@ const ItemMaster = () => {
   const handleAddItem = async (newItem) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5001/api/itemMaster", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(newItem),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/itemMaster`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(newItem),
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to add item");
       }
@@ -78,7 +83,7 @@ const ItemMaster = () => {
       const itemId = updatedItem.id;
 
       const response = await fetch(
-        `http://localhost:5001/api/itemMaster/${itemId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/itemMaster/${itemId}`,
         {
           method: "PUT",
           headers: {
@@ -104,7 +109,7 @@ const ItemMaster = () => {
   const handleDeleteItem = async (itemId) => {
     try {
       const response = await fetch(
-        `http://localhost:5001/api/itemMaster/${itemId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/itemMaster/${itemId}`,
         {
           method: "DELETE",
         }
