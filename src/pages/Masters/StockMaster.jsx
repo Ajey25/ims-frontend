@@ -24,8 +24,12 @@ const ItemMaster = () => {
 
   const fetchItems = async () => {
     try {
-      const stockRes = await fetch("http://localhost:5001/api/stockMaster");
-      const itemRes = await fetch("http://localhost:5001/api/itemMaster");
+      const stockRes = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/stockMaster`
+      );
+      const itemRes = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/itemMaster`
+      );
 
       if (!stockRes.ok || !itemRes.ok) throw new Error("Fetch failed");
 

@@ -39,9 +39,12 @@ const Inward = () => {
 
   const fetchInwardData = async () => {
     try {
-      const response = await fetch("http://localhost:5001/api/inward", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/inward`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch inward data");
       }
@@ -54,7 +57,9 @@ const Inward = () => {
 
   const fetchItemData = async () => {
     try {
-      const response = await fetch("http://localhost:5001/api/itemMaster");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/itemMaster`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch item data");
       }
@@ -71,13 +76,16 @@ const Inward = () => {
 
   const handleAddInward = async (newItem) => {
     try {
-      const response = await fetch("http://localhost:5001/api/inward", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newItem),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/inward`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newItem),
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to add item");
       }
@@ -97,7 +105,7 @@ const Inward = () => {
       let response;
       if (editingInward) {
         response = await fetch(
-          `http://localhost:5001/api/inward/${editingInward.id}`,
+          `${import.meta.env.VITE_API_BASE_URL}/inward/${editingInward.id}`,
           {
             method: "PUT",
             headers: {
@@ -108,7 +116,7 @@ const Inward = () => {
           }
         );
       } else {
-        response = await fetch("http://localhost:5001/api/inward", {
+        response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/inward`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -140,9 +148,12 @@ const Inward = () => {
 
   const handleDelete = async (_id) => {
     try {
-      const response = await fetch(`http://localhost:5001/api/inward/${_id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/inward/${_id}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (!response.ok) throw new Error("Failed to delete inward");
 
       fetchInwardData(); // Refresh the data
