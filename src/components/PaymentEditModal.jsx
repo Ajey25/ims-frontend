@@ -468,7 +468,7 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
     <div className="payment-edit-modal ">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3 className="modal-title">Add Payment</h3>
-        <button className="btn btn-outline-secondary" onClick={onClose}>
+        <button className="btn btn-secondary" onClick={onClose}>
           Back
         </button>
       </div>
