@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginImg from "../assets/login.jpg";
+import { toast } from "react-toastify";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,6 +39,7 @@ const Login = () => {
       // Redirect to Item Master page
       console.log("Logged in successfully");
       navigate("/app/masters/item-master");
+      toast.success("Logged in Successfully");
     } catch (err) {
       setError(err.message);
       setIsLoading(false);
