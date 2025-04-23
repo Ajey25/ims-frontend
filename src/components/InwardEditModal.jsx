@@ -6,7 +6,7 @@ import axios from "axios";
 import Pdf from "../assets/pdf-icon.png";
 import { FaTimes } from "react-icons/fa";
 
-const InwardEditModal = ({ inward, onSave, onClose }) => {
+const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
   const [inwardNo, setInwardNo] = useState("");
   const [inwardDate, setInwardDate] = useState(() => {
     const today = new Date().toISOString("").split("T")[0]; // Get YYYY-MM-DD format
@@ -624,8 +624,14 @@ const InwardEditModal = ({ inward, onSave, onClose }) => {
         )}
 
         <div className="d-flex justify-content-end gap-2">
-          <Button variant="primary" type="submit">
-            {inward ? "Update" : "Save"}
+          <Button variant="primary" type="submit" disabled={isSaving}>
+            {isSaving
+              ? inward
+                ? "Updating..."
+                : "Saving..."
+              : inward
+              ? "Update"
+              : "Save"}{" "}
           </Button>
         </div>
       </form>

@@ -14,6 +14,7 @@ const UserMaster = () => {
   const [showDetailsView, setShowDetailsView] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const updateRowsPerPage = () => {
@@ -45,6 +46,7 @@ const UserMaster = () => {
   };
 
   const handleAddUser = async (newUser) => {
+    setIsSaving(true);
     try {
       const token = localStorage.getItem("token");
       await axios.post(
@@ -60,10 +62,15 @@ const UserMaster = () => {
     } catch (error) {
       console.error("Error adding user:", error);
       toast.error("Failed to add user maybe gmail already exists");
+    } finally {
+      setIsSaving(false);
+      console.log("Saving state reset");
+      // this ALWAYS runs, rain or shine
     }
   };
 
   const handleEditUser = async (updatedUser) => {
+    setIsSaving(true);
     try {
       const token = localStorage.getItem("token");
       await axios.put(
@@ -78,6 +85,10 @@ const UserMaster = () => {
     } catch (error) {
       console.error("Error updating user:", error);
       toast.error("Failed to update user");
+    } finally {
+      setIsSaving(false);
+      console.log("Saving state reset");
+      // this ALWAYS runs, rain or shine
     }
   };
 
@@ -102,6 +113,7 @@ const UserMaster = () => {
           setShowEditForm(false);
           setSelectedUser(null);
         }}
+        isSaving={isSaving}
       />
     );
   }

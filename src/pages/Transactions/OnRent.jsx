@@ -23,6 +23,7 @@ const OnRent = () => {
   const [customerOptions, setCustomerOptions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (onRentNo) {
@@ -106,6 +107,7 @@ const OnRent = () => {
   };
 
   const saveOnRent = async (onRentData) => {
+    setIsSaving(true);
     try {
       const preparedItems = await Promise.all(
         onRentData.items.map(async (item) => {
@@ -215,6 +217,10 @@ const OnRent = () => {
       console.error("Error saving onRent:", error);
       const errorMessage = error.response?.data?.message || error.message;
       toast.error(`Failed to save onRent: ${errorMessage}`);
+    } finally {
+      setIsSaving(false);
+      console.log("Saving state reset");
+      // this ALWAYS runs, rain or shine
     }
   };
 
@@ -296,6 +302,7 @@ const OnRent = () => {
           onRent={selectedOnRent}
           onSave={saveOnRent}
           onClose={() => setShowEditForm(false)}
+          isSaving={isSaving}
         />
       ) : showDetails && selectedOnRent ? (
         <OnRentDetailsModal

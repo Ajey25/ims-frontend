@@ -6,7 +6,7 @@ import axios from "axios";
 import { FaTimes } from "react-icons/fa";
 import Select from "react-select";
 
-const OnRentEditModal = ({ onRent, onSave, onClose }) => {
+const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
   const [onRentNo, setOnRentNo] = useState("");
   const [onRentDate, setOnRentDate] = useState("");
   const [customerId, setCustomerId] = useState("");
@@ -605,8 +605,14 @@ const OnRentEditModal = ({ onRent, onSave, onClose }) => {
         )}
 
         <div className="d-flex justify-content-end gap-2">
-          <Button variant="primary" type="submit">
-            {onRent ? "Update" : "Save"}
+          <Button variant="primary" type="submit" disabled={isSaving}>
+            {isSaving
+              ? onRent
+                ? "Updating..."
+                : "Saving..."
+              : onRent
+              ? "Update"
+              : "Save"}{" "}
           </Button>
         </div>
       </form>

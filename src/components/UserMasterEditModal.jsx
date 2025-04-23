@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const UserMasterEditModal = ({ user, onSave, onClose }) => {
+const UserMasterEditModal = ({ user, onSave, onClose, isSaving }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -169,8 +169,15 @@ const UserMasterEditModal = ({ user, onSave, onClose }) => {
             type="submit"
             className="btn btn-primary"
             onClick={handleSubmit}
+            disabled={isSaving}
           >
-            {user ? "Save Changes" : "Add User"}
+            {isSaving
+              ? user
+                ? "Updating..."
+                : "Saving..."
+              : user
+              ? "Update"
+              : "Save"}
           </button>
         </div>
       </div>

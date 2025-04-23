@@ -13,6 +13,7 @@ const Inward = () => {
   const [showDetailsPopup, setShowDetailsPopup] = useState(false);
   const [itemMap, setItemMap] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [isSaving, setIsSaving] = useState(false);
 
   const token = localStorage.getItem("token");
   const [rowsPerPage, setRowsPerPage] = useState(10); // Change this as needed
@@ -74,31 +75,32 @@ const Inward = () => {
     }
   };
 
-  const handleAddInward = async (newItem) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/inward`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newItem),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to add item");
-      }
-      fetchInwardData(); // Refresh list after adding
-      toast.success("Inward added successfully");
-    } catch (error) {
-      console.error("Error adding item:", error);
-      // alert("failed to add inward ,maybe is already used ");
-      toast.error("Failed to add inward");
-    }
-  };
+  // const handleAddInward = async (newItem) => {
+  //   try {
+  //     const response = await fetch(
+  //       `${import.meta.env.VITE_API_BASE_URL}/inward`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(newItem),
+  //       }
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error("Failed to add item");
+  //     }
+  //     fetchInwardData(); // Refresh list after adding
+  //     toast.success("Inward added successfully");
+  //   } catch (error) {
+  //     console.error("Error adding item:", error);
+  //     // alert("failed to add inward ,maybe is already used ");
+  //     toast.error("Failed to add inward");
+  //   }
+  // };
 
   const handleSave = async (newInward) => {
+    setIsSaving(true);
     try {
       const token = localStorage.getItem("token");
 
@@ -143,6 +145,10 @@ const Inward = () => {
     } catch (error) {
       console.error("Error saving inward:", error);
       toast.error(error.message || "Failed to save inward");
+    } finally {
+      setIsSaving(false);
+      console.log("Saving state reset");
+      // this ALWAYS runs, rain or shine
     }
   };
 
@@ -229,6 +235,7 @@ const Inward = () => {
             setShowPopup(false);
             setEditingInward(null);
           }}
+          isSaving={isSaving}
         />
       ) : showDetailsPopup ? (
         <InwardDetailsModal
