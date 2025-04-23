@@ -54,7 +54,7 @@ const Login = () => {
           <img
             src={LoginImg}
             alt="Login"
-            className="img-fluid mb-3 mb-md-0 w-100 border-1 "
+            className="img-fluid mb-md-0 w-100 border-1 "
             style={{ objectFit: "cover" }}
           />
         </div>
