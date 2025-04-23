@@ -12,6 +12,7 @@ const CustomerMaster = () => {
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showDetailsView, setShowDetailsView] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10); // Default for large screens
 
@@ -50,6 +51,7 @@ const CustomerMaster = () => {
   }, []);
 
   const handleAddCustomer = async (newCustomer) => {
+    setIsSaving(true);
     try {
       const token = localStorage.getItem("token");
 
@@ -77,10 +79,16 @@ const CustomerMaster = () => {
       // alert("failed to add customer ,maybe gmail is already used ");
       // setShowEditForm(true);
       toast.error("failed to add customer ,maybe gmail is already used ");
+    } finally {
+      setIsSaving(false);
+      console.log("Saving state reset");
+      // this ALWAYS runs, rain or shine
     }
   };
 
   const handleEditCustomer = async (updatedCustomer) => {
+    setIsSaving(true);
+
     try {
       const customerId = updatedCustomer.id;
       const token = localStorage.getItem("token");
@@ -109,6 +117,10 @@ const CustomerMaster = () => {
     } catch (error) {
       console.error("Error updating customer:", error);
       toast.error("failed to update customer ,maybe gmail is already used ");
+    } finally {
+      setIsSaving(false);
+      console.log("Saving state reset");
+      // this ALWAYS runs, rain or shine
     }
   };
 
@@ -183,6 +195,7 @@ const CustomerMaster = () => {
           setShowEditForm(false);
           setSelectedCustomer(null);
         }}
+        isSaving={isSaving}
       />
     );
   }

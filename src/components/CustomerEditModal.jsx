@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Form } from "react-bootstrap";
 
-const CustomerEditModal = ({ customer, onSave, onClose }) => {
+const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
   const [customerName, setCustomerName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
@@ -336,8 +336,14 @@ const CustomerEditModal = ({ customer, onSave, onClose }) => {
         </div>
 
         <div className="d-flex justify-content-end gap-2">
-          <button type="submit" className="btn btn-primary">
-            {customer ? "Update" : "Save"}
+          <button type="submit" className="btn btn-primary" disabled={isSaving}>
+            {isSaving
+              ? customer
+                ? "Updating..."
+                : "Saving..."
+              : customer
+              ? "Update"
+              : "Save"}
           </button>
         </div>
       </form>
