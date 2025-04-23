@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LoginImg from "../assets/login.jpg";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,54 +44,70 @@ const Login = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
-      <div className="card shadow-lg p-4" style={{ width: "350px" }}>
-        <h4 className="text-center mb-3">Admin Login</h4>
+    <div className="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light px-3 ">
+      <div
+        className="row w-100 shadow-lg rounded-5 shadow-info overflow-hidden"
+        style={{ maxWidth: "900px" }}
+      >
+        {/* Left Side - Image (hidden on small screens) */}
+        <div className=" col-12 col-md-6  p-0">
+          <img
+            src={LoginImg}
+            alt="Login"
+            className="img-fluid mb-3 mb-md-0 w-100 border-1 "
+            style={{ objectFit: "cover" }}
+          />
+        </div>
 
-        {error && (
-          <div className="alert alert-danger text-center" role="alert">
-            {error}
-          </div>
-        )}
+        {/* Right Side - Login Form */}
+        <div className="col-md-6 bg-white p-4 d-flex flex-column justify-content-center">
+          <h4 className="text-center mb-4 fw-bold">Admin Login</h4>
 
-        <form onSubmit={handleLogin}>
-          <div className="mb-3">
-            <label className="form-label">Email</label>
-            <input
-              type="email"
-              placeholder="Enter email"
-              className="form-control"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Password</label>
-            <input
-              type="password"
-              placeholder="Enter password"
-              className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="btn btn-primary w-100"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <span className="spinner-border spinner-border-sm me-2"></span>
-                Logging in...
-              </>
-            ) : (
-              "Login"
-            )}
-          </button>
-        </form>
+          {error && (
+            <div className="alert alert-danger text-center" role="alert">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleLogin}>
+            <div className="mb-3">
+              <label className="form-label">Email</label>
+              <input
+                type="email"
+                className="form-control"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Password</label>
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="btn btn-primary w-100"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2"></span>
+                  Logging in...
+                </>
+              ) : (
+                "Login"
+              )}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
