@@ -160,7 +160,7 @@ const ItemMaster = () => {
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
   return (
-    <div className="container mt-3">
+    <div className="container mt-1 px-0">
       <h4 className="mb-3">Stock Master</h4>
 
       <div className="d-flex align-items-start gap-3 mb-3">

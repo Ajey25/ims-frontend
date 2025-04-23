@@ -60,60 +60,84 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
             <div className="card-body">
               <h5 className="card-title text-primary">Return Details</h5>
               <div className="row">
-                <div className="col-6">
-                  <small className="text-muted">Return No:</small>
-                  <p className="fw-semibold">{orr.onRentReturnNo}</p>
-                </div>
-                <div className="col-6">
-                  <small className="text-muted">Return Date:</small>
-                  <p className="fw-semibold">
-                    {new Date(orr.onRentReturnDate).toLocaleDateString("en-GB")}
-                  </p>
-                </div>
-                <div className="col-6">
-                  <small className="text-muted">Customer Name:</small>
-                  <p className="fw-semibold">{orr.customers?.customerName}</p>
-                </div>
-                <div className="col-6">
-                  <small className="text-muted">Payment Status:</small>
-                  <p className="fw-semibold">
-                    <span
-                      className={`badge ${
-                        orr.isReturnCompleted
-                          ? "bg-success"
-                          : "bg-warning text-dark"
-                      }`}
-                    >
-                      {orr.isReturnCompleted ? "Completed" : "Pending"}
-                    </span>
-                  </p>
-                </div>
+                {[
+                  { label: "Return No", value: orr.onRentReturnNo },
+                  {
+                    label: "Return Date",
+                    value: new Date(orr.onRentReturnDate).toLocaleDateString(
+                      "en-GB"
+                    ),
+                  },
+                  {
+                    label: "Customer",
+                    value: orr.customers?.customerName || "N/A",
+                  },
+                  {
+                    label: "Payment Status",
+                    value: (
+                      <span
+                        className={`badge ${
+                          orr.isReturnCompleted
+                            ? "bg-success"
+                            : "bg-warning text-dark"
+                        }`}
+                      >
+                        {orr.isReturnCompleted ? "Completed" : "Pending"}
+                      </span>
+                    ),
+                  },
+                ].map(({ label, value }, index) => (
+                  <div className="col-6 mb-3" key={index}>
+                    <div className="d-flex">
+                      <div
+                        className="fw-semibold"
+                        style={{
+                          minWidth: "130px",
+                        }}
+                      >
+                        {label}
+                      </div>
+                      <div style={{ minWidth: "10px" }}>
+                        <strong>:</strong>
+                      </div>
+                      <div className=" ms-2">{value}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
+
         {/* Vehicle Details */}
         <div className="col-md-6">
           <div className="card shadow-sm mb-3">
             <div className="card-body">
               <h5 className="card-title text-primary">Vehicle Details</h5>
               <div className="row">
-                <div className="col-6">
-                  <small className="text-muted">Vehicle Name:</small>
-                  <p className="fw-semibold">{orr.vehicleName || "N/A"}</p>
-                </div>
-                <div className="col-6">
-                  <small className="text-muted">Vehicle No:</small>
-                  <p className="fw-semibold">{orr.vehicleNo || "N/A"}</p>
-                </div>
-                <div className="col-6">
-                  <small className="text-muted">Driver Name:</small>
-                  <p className="fw-semibold">{orr.driverName || "N/A"}</p>
-                </div>
-                <div className="col-6">
-                  <small className="text-muted">Driver Mobile:</small>
-                  <p className="fw-semibold">{orr.mobileNo || "N/A"}</p>
-                </div>
+                {[
+                  { label: "Vehicle Name", value: orr.vehicleName || "N/A" },
+                  { label: "Vehicle No", value: orr.vehicleNo || "N/A" },
+                  { label: "Driver Name", value: orr.driverName || "N/A" },
+                  { label: "Driver Mobile", value: orr.mobileNo || "N/A" },
+                ].map(({ label, value }, index) => (
+                  <div className="col-6 mb-3" key={index}>
+                    <div className="d-flex">
+                      <div
+                        className="fw-semibold"
+                        style={{
+                          minWidth: "130px",
+                        }}
+                      >
+                        {label}
+                      </div>
+                      <div style={{ minWidth: "10px" }}>
+                        <strong>:</strong>
+                      </div>
+                      <div className=" ms-2">{value}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

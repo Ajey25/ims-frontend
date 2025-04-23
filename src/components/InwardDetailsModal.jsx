@@ -12,7 +12,7 @@ const InwardDetailsModal = ({ inward, itemMap, onClose }) => {
       <div>
         <div className="d-flex justify-content-between mb-3">
           <h3>Inward Details</h3>
-          <button className="btn btn-outline-secondary" onClick={onClose}>
+          <button className="btn btn-secondary" onClick={onClose}>
             Close
           </button>
         </div>
@@ -23,48 +23,40 @@ const InwardDetailsModal = ({ inward, itemMap, onClose }) => {
             <div className="">
               <table className="table table-borderless">
                 <tbody>
-                  <tr>
-                    <td>
-                      <strong>Inward No:</strong>
-                    </td>
-                    <td>{inward.inwardNo}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <strong>Inward Date:</strong>
-                    </td>
-                    <td>
-                      {new Date(inward.inwardDate).toLocaleDateString("en-GB")}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <strong>Total Amount:</strong>
-                    </td>
-                    <td>₹{inward.totalAmount}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <strong>Created By:</strong>
-                    </td>
-                    <td>{inward.createdBy}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <strong>Created By:</strong>
-                    </td>
-                    <td>
-                      {" "}
-                      {new Date(inward.createdAt).toLocaleDateString("en-GB")}
-                    </td>
-                  </tr>
+                  {[
+                    { label: "Inward No", value: inward.inwardNo },
+                    {
+                      label: "Inward Date",
+                      value: new Date(inward.inwardDate).toLocaleDateString(
+                        "en-GB"
+                      ),
+                    },
+                    { label: "Total Amount", value: `₹${inward.totalAmount}` },
+                    { label: "Created By", value: inward.createdBy },
+                    {
+                      label: "Created At",
+                      value: new Date(inward.createdAt).toLocaleDateString(
+                        "en-GB"
+                      ),
+                    },
+                  ].map(({ label, value }, index) => (
+                    <tr key={index}>
+                      <td style={{ minWidth: "130px", fontWeight: "bold" }}>
+                        {label}
+                      </td>
+                      <td style={{ minWidth: "10px" }}>
+                        <strong>:</strong>
+                      </td>
+                      <td>{value}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
 
             {/* Right Section (Attachment) */}
             {inward.attachment && (
-              <div className="mt-3 mt-md-0">
+              <div className="mt-3 mt-md-1 mx-5">
                 <label className="form-label">
                   <strong>Attachment:</strong>
                 </label>
@@ -110,42 +102,48 @@ const InwardDetailsModal = ({ inward, itemMap, onClose }) => {
           </div>
         </div>
 
-        {/* Responsive Table with Horizontal Scroll */}
-        <div className="table-responsive mt-3" style={{ overflowX: "auto" }}>
-          <Table bordered hover>
-            <thead>
-              <tr>
-                <th>Item Name</th>
-                <th>UOM</th>
-                <th>Quantity</th>
-                <th>Weight</th>
-                <th>Unit Rate</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {inward?.inwardItems?.map((item, index) => (
-                <tr key={index}>
-                  <td>
-                    <strong>{itemMap[item.item] || item.itemName}</strong>
-                  </td>
-                  <td>{item.UOMDetails?.uom}</td>
-                  <td>{item.qty}</td>
-                  <td>{item.weight}</td>
-                  <td>{item.rate}</td>
-                  <td>₹{item.totalAmount}</td>
-                </tr>
-              ))}
-              <tr>
-                <td colSpan="5" className="text-end">
-                  <strong>Total Amount:</strong>
-                </td>
-                <td>
-                  <strong>₹{inward.totalAmount}</strong>
-                </td>
-              </tr>
-            </tbody>
-          </Table>
+        <div className="card mt-4 shadow-sm">
+          <div className="card-header bg-primary text-white">
+            <h5 className="mb-0">Inward Items</h5>
+          </div>
+          <div className="card-body p-0">
+            <div className="table-responsive " style={{ overflowX: "auto" }}>
+              <Table className="table  table-hover ">
+                <thead className="table-light">
+                  <tr>
+                    <th>Item Name</th>
+                    <th>UOM</th>
+                    <th>Quantity</th>
+                    <th>Weight</th>
+                    <th>Unit Rate</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {inward?.inwardItems?.map((item, index) => (
+                    <tr key={index}>
+                      <td>
+                        <strong>{itemMap[item.item] || item.itemName}</strong>
+                      </td>
+                      <td>{item.UOMDetails?.uom}</td>
+                      <td>{item.qty}</td>
+                      <td>{item.weight}</td>
+                      <td>{item.rate}</td>
+                      <td>₹{item.totalAmount}</td>
+                    </tr>
+                  ))}
+                  <tr>
+                    <td colSpan="5" className="text-end">
+                      <strong>Total Amount:</strong>
+                    </td>
+                    <td>
+                      <strong>₹{inward.totalAmount}</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            </div>
+          </div>
         </div>
       </div>
     </div>

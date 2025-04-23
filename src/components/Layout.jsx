@@ -79,7 +79,10 @@ const Layout = () => {
         </AnimatePresence>
 
         {/* Animated Page Content */}
-        <div className="flex-grow-1 overflow-auto">
+        <div
+          className="flex-grow-1 overflow-auto"
+          style={{ backgroundColor: "#ddd" }}
+        >
           <div className="container-fluid p-3">
             <AnimatePresence mode="wait">
               <motion.div

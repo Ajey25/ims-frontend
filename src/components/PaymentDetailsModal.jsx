@@ -16,7 +16,7 @@ const PaymentDetails = ({ payment, onClose }) => {
   const fetchCustomerName = async (customerId) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}customerMaster/${customerId}`
+        `${import.meta.env.VITE_API_BASE_URL}/customerMaster/${customerId}`
       );
       setCustomerName(response.data.customerName);
     } catch (error) {
@@ -31,7 +31,7 @@ const PaymentDetails = ({ payment, onClose }) => {
     <div className="container mt-4">
       <div className="d-flex justify-content-between mb-3">
         <h3>Payment Details</h3>
-        <button className="btn btn-outline-secondary" onClick={onClose}>
+        <button className="btn btn-secondary" onClick={onClose}>
           Close
         </button>
       </div>
@@ -39,49 +39,49 @@ const PaymentDetails = ({ payment, onClose }) => {
       <div className="card mb-4">
         <div className="card-body">
           <div className="row g-3">
-            <div className="col-md-6">
-              <label className="form-label fw-bold">Payment ID</label>
-              <p className="text-muted">{payment.id}</p>
-            </div>
-            <div className="col-md-6">
-              <label className="form-label fw-bold">Customer Name</label>
-              <p className="text-muted">{customerName}</p>
-            </div>
-            <div className="col-md-6">
-              <label className="form-label fw-bold">Paid Amount</label>
-              <p className="text-muted">₹{payment.paidAmount.toFixed(2)}</p>
-            </div>
-            <div className="col-md-6">
-              <label className="form-label fw-bold">Payment Date</label>
-              <p className="text-muted">
-                {new Date(payment.createdAt).toLocaleDateString("en-IN", {
+            {[
+              { label: "Payment ID", value: payment.id },
+              { label: "Customer", value: customerName },
+              {
+                label: "Paid Amount",
+                value: `₹${payment.paidAmount.toFixed(2)}`,
+              },
+              {
+                label: "Payment Date",
+                value: new Date(payment.createdAt).toLocaleDateString("en-IN", {
                   day: "2-digit",
                   month: "2-digit",
                   year: "numeric",
                   hour: "2-digit",
                   minute: "2-digit",
-                })}
-              </p>
-            </div>
-            <div className="col-md-6">
-              <label className="form-label fw-bold">Payment Type</label>
-              <p className="text-muted">{payment.paymentType}</p>
-            </div>
-            <div className="col-md-6">
-              <label className="form-label fw-bold">Created By</label>
-              <p className="text-muted">{payment.createdBy}</p>
-            </div>
+                }),
+              },
+              { label: "Payment Type", value: payment.paymentType },
+              { label: "Created By", value: payment.createdBy },
+            ].map(({ label, value }, idx) => (
+              <div className="col-md-6" key={idx}>
+                <div className="d-flex">
+                  <div style={{ minWidth: "130px" }} className="fw-bold">
+                    {label}
+                  </div>
+                  <div style={{ minWidth: "10px" }}>
+                    <strong>:</strong>
+                  </div>
+                  <div className=" ms-2">{value}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="card mb-4">
-        <div className="card-header">
+      <div className="card mb-4 shadow-sm">
+        <div className="card-header bg-primary text-white ">
           <h5 className="mb-0">Allocated Returns</h5>
         </div>
-        <div className="card-body">
+        <div className="card-body p-0">
           <div className="table-responsive mobile-table-container px-0">
-            <table className="table table-bordered table-hover">
+            <table className="table  table-hover">
               <thead className="table-light">
                 <tr>
                   <th>Return No.</th>
