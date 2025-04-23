@@ -47,15 +47,15 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3 className="fw-bold">Return Details</h3>
-        <button className="btn btn-outline-secondary" onClick={onClose}>
-          Close
+        <button className="btn btn-secondary" onClick={onClose}>
+          Back
         </button>
       </div>
 
       {/* Details Section */}
       <div className="row">
         {/* Return Details */}
-        <div className="col-md-6">
+        <div className="col-12 col-md-6">
           <div className="card shadow-sm mb-3">
             <div className="card-body">
               <h5 className="card-title text-primary">Return Details</h5>
@@ -87,8 +87,8 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
                     ),
                   },
                 ].map(({ label, value }, index) => (
-                  <div className="col-6 mb-3" key={index}>
-                    <div className="d-flex">
+                  <div className="col-12 col-sm-6 mb-3" key={index}>
+                    <div className="d-flex flex-wrap">
                       <div
                         className="fw-semibold"
                         style={{
@@ -100,7 +100,7 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
                       <div style={{ minWidth: "10px" }}>
                         <strong>:</strong>
                       </div>
-                      <div className=" ms-2">{value}</div>
+                      <div className="ms-2">{value}</div>
                     </div>
                   </div>
                 ))}
@@ -110,7 +110,7 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
         </div>
 
         {/* Vehicle Details */}
-        <div className="col-md-6">
+        <div className="col-12 col-md-6">
           <div className="card shadow-sm mb-3">
             <div className="card-body">
               <h5 className="card-title text-primary">Vehicle Details</h5>
@@ -121,8 +121,8 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
                   { label: "Driver Name", value: orr.driverName || "N/A" },
                   { label: "Driver Mobile", value: orr.mobileNo || "N/A" },
                 ].map(({ label, value }, index) => (
-                  <div className="col-6 mb-3" key={index}>
-                    <div className="d-flex">
+                  <div className="col-12 col-sm-6 mb-3" key={index}>
+                    <div className="d-flex flex-wrap">
                       <div
                         className="fw-semibold"
                         style={{
@@ -134,7 +134,7 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
                       <div style={{ minWidth: "10px" }}>
                         <strong>:</strong>
                       </div>
-                      <div className=" ms-2">{value}</div>
+                      <div className="ms-2">{value}</div>
                     </div>
                   </div>
                 ))}

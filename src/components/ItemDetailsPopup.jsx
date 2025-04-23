@@ -10,7 +10,7 @@ const ItemDetailsPopup = ({ item, onClose }) => {
         <div className="d-flex justify-content-between mb-3">
           <h3>Item Details</h3>
           <button className="btn btn-secondary" onClick={onClose}>
-            Back to List
+            Back
           </button>
         </div>
 

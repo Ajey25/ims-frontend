@@ -152,8 +152,8 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
     <div className="container mt-2">
       <div className="d-flex justify-content-between mb-3">
         <h3>{customer ? "Edit Customer" : "Add Customer"}</h3>
-        <button className="btn btn-outline-secondary" onClick={onClose}>
-          Close
+        <button className="btn btn-secondary" onClick={onClose}>
+          Back
         </button>
       </div>
 

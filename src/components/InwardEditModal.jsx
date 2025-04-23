@@ -338,8 +338,8 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
     <div className="container mt-4">
       <div className="d-flex justify-content-between mb-3">
         <h3>{inward ? "Edit Inward" : "Add Inward"}</h3>
-        <button className="btn btn-outline-secondary" onClick={onClose}>
-          Close
+        <button className="btn btn-secondary" onClick={onClose}>
+          Back
         </button>
       </div>
       <form onSubmit={handleSubmit} className="card p-3">
@@ -494,7 +494,7 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
           <div className="mb-3">
             <h5>Selected Items</h5>
             <div className="table-responsive">
-              <table className="table table-bordered">
+              <table className="table table-sm shadow-sm table-bordered">
                 <thead className="table-light">
                   <tr>
                     <th>Item Name</th>

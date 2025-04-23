@@ -8,8 +8,8 @@ const CustomerDetailsModal = ({ customer, onClose }) => {
     <div className="container mt-4">
       <div className="d-flex justify-content-between mb-3">
         <h3>Customer Details</h3>
-        <button className="btn btn-outline-secondary" onClick={onClose}>
-          Back to List
+        <button className="btn btn-secondary" onClick={onClose}>
+          Back
         </button>
       </div>
 

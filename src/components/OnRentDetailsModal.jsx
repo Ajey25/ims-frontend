@@ -14,14 +14,14 @@ const OnRentDetailsView = ({ onRent, onClose }) => {
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3>On Rent Details - {onRent.onRentNo}</h3>
-        <button className="btn btn-outline-secondary" onClick={onClose}>
-          close
+        <button className="btn btn-secondary" onClick={onClose}>
+          Back
         </button>
       </div>
 
       <div className="row">
         {/* Return Details */}
-        <div className="col-md-6">
+        <div className="col-12 col-md-6">
           <div className="card shadow-sm mb-3">
             <div className="card-body">
               <h5 className="card-title text-primary">Return Details</h5>
@@ -53,20 +53,18 @@ const OnRentDetailsView = ({ onRent, onClose }) => {
                     ),
                   },
                 ].map(({ label, value }, index) => (
-                  <div className="col-6 mb-2" key={index}>
-                    <div className="d-flex  ">
+                  <div className="col-12 col-sm-6 mb-2" key={index}>
+                    <div className="d-flex flex-wrap">
                       <div
-                        className="fw-semibold"
-                        style={{
-                          minWidth: "100px",
-                        }}
+                        className="fw-semibold me-1"
+                        style={{ minWidth: "100px" }}
                       >
                         {label}
                       </div>
                       <div style={{ minWidth: "10px" }}>
                         <strong>:</strong>
                       </div>
-                      <div className=" ms-2">{value}</div>
+                      <div className="ms-2">{value}</div>
                     </div>
                   </div>
                 ))}
@@ -76,7 +74,7 @@ const OnRentDetailsView = ({ onRent, onClose }) => {
         </div>
 
         {/* Vehicle Details */}
-        <div className="col-md-6">
+        <div className="col-12 col-md-6">
           <div className="card shadow-sm mb-3">
             <div className="card-body">
               <h5 className="card-title text-primary">Vehicle Details</h5>
@@ -87,20 +85,18 @@ const OnRentDetailsView = ({ onRent, onClose }) => {
                   { label: "Driver Name", value: onRent.driverName || "N/A" },
                   { label: "Driver Mobile", value: onRent.mobileNo || "N/A" },
                 ].map(({ label, value }, index) => (
-                  <div className="col-6 mb-2" key={index}>
-                    <div className="d-flex">
+                  <div className="col-12 col-sm-6 mb-2" key={index}>
+                    <div className="d-flex flex-wrap">
                       <div
-                        className="fw-semibold"
-                        style={{
-                          minWidth: "120px",
-                        }}
+                        className="fw-semibold me-1"
+                        style={{ minWidth: "120px" }}
                       >
                         {label}
                       </div>
                       <div style={{ minWidth: "10px" }}>
                         <strong>:</strong>
                       </div>
-                      <div className=" ms-2">{value}</div>
+                      <div className="ms-2">{value}</div>
                     </div>
                   </div>
                 ))}

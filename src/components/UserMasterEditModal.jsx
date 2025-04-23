@@ -84,12 +84,12 @@ const UserMasterEditModal = ({ user, onSave, onClose, isSaving }) => {
     <div className="container mt-4">
       <div className="d-flex justify-content-between mb-3">
         <h3>{user ? "Edit User" : "Add User"}</h3>
-        <button className="btn btn-outline-secondary" onClick={onClose}>
-          Back to List
+        <button className="btn btn-secondary" onClick={onClose}>
+          Back
         </button>
       </div>
 
-      <div className="card">
+      <div className="card shadow-sm">
         <div className="card-body">
           <form onSubmit={handleSubmit}>
             <div className="row">

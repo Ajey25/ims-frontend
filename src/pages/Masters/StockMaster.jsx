@@ -189,8 +189,8 @@ const ItemMaster = () => {
       {showTable && (
         <>
           <div className="table-responsive">
-            <table className="table table-bordered table-striped">
-              <thead className="table-primary">
+            <table className="table shadow-sm table-bordered ">
+              <thead className="table-light">
                 <tr>
                   <th>Sr No.</th>
                   <th>Item Name</th>

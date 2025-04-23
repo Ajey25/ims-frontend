@@ -148,7 +148,7 @@ const UserMaster = () => {
       <div className="d-flex justify-content-end mb-2">
         <input
           type="text"
-          className="form-control"
+          className="form-control shadow-sm"
           style={{ width: "250px" }}
           placeholder="Search User..."
           value={searchTerm}
@@ -156,9 +156,9 @@ const UserMaster = () => {
         />
       </div>
 
-      <div className="table-responsive" style={{ minHeight: "395px" }}>
-        <table className="table table-sm table-bordered table-striped text-center">
-          <thead className="table-dark">
+      <div className="table-responsive " style={{ minHeight: "395px" }}>
+        <table className="table table-sm shadow-sm table-bordered  text-center">
+          <thead className="table-light">
             <tr>
               <th>#</th>
               <th>First Name</th>

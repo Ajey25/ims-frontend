@@ -13,7 +13,7 @@ const InwardDetailsModal = ({ inward, itemMap, onClose }) => {
         <div className="d-flex justify-content-between mb-3">
           <h3>Inward Details</h3>
           <button className="btn btn-secondary" onClick={onClose}>
-            Close
+            Back
           </button>
         </div>
 
@@ -108,7 +108,7 @@ const InwardDetailsModal = ({ inward, itemMap, onClose }) => {
           </div>
           <div className="card-body p-0">
             <div className="table-responsive " style={{ overflowX: "auto" }}>
-              <Table className="table  table-hover ">
+              <Table className="table shadow-sm  table-hover ">
                 <thead className="table-light">
                   <tr>
                     <th>Item Name</th>

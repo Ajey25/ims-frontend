@@ -209,11 +209,14 @@ const Reports = () => {
       const pdfData = doc.output("datauristring");
 
       // Send PDF data to backend
-      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/report/send-report`, {
-        customerId: selectedCustomerId, // Send the selected customer ID
-        pdfBase64: pdfData, // Base64 string of the PDF
-        customerName: selectedCustomer, // Send the customer name
-      });
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/report/send-report`,
+        {
+          customerId: selectedCustomerId, // Send the selected customer ID
+          pdfBase64: pdfData, // Base64 string of the PDF
+          customerName: selectedCustomer, // Send the customer name
+        }
+      );
 
       toast.success("Email sent successfully!");
     } catch (error) {
@@ -391,8 +394,8 @@ const Reports = () => {
               <div>
                 <h4>On Rent Details</h4>
                 <div className="table-responsive">
-                  <table className="table table-sm table-bordered">
-                    <thead className="table-dark">
+                  <table className="table table-sm table-bordered shadow-sm">
+                    <thead className="table-light">
                       <tr>
                         <th>OnRent No</th>
                         <th>OnRent Date</th>
@@ -425,7 +428,9 @@ const Reports = () => {
                               }
 
                               const onRentNo = record.onRentNo; // Fallback in case function fails
-                              const url = `${import.meta.env.VITE_API_BASE_URL}/app/transactions/onrent?onRentNo=${onRentNo}`;
+                              const url = `${
+                                import.meta.env.VITE_API_BASE_URL
+                              }/app/transactions/onrent?onRentNo=${onRentNo}`;
 
                               window.open(url, "_blank");
                             }}
@@ -463,11 +468,11 @@ const Reports = () => {
           {/* Payment Data Table */}
           {hasSearched &&
             (filteredPaymentData.length > 0 ? (
-              <div>
+              <div className="mt-3">
                 <h4>Payment Details</h4>
                 <div className="table-responsive">
-                  <table className="table table-sm table-bordered">
-                    <thead className="table-dark">
+                  <table className="table table-sm shadow-sm table-bordered">
+                    <thead className="table-light">
                       <tr>
                         <th>#</th>
                         <th>Payment Date</th>
@@ -495,7 +500,7 @@ const Reports = () => {
                 </div>
 
                 {/* Summary Section */}
-                <div className="mt-4 p-3 border rounded bg-light shadow-sm">
+                <div className="mt-4 p-3 border rounded bg-light shadow-lg">
                   <h4 className="text-center">Summary</h4>
                   <div className="row text-center text-md-start">
                     <div className="col-12 col-md-4 mb-2">

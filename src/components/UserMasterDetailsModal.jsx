@@ -9,7 +9,7 @@ const UserMasterDetailsModal = ({ user, onClose }) => {
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h3>User Details</h3>
           <button className="btn btn-secondary" onClick={onClose}>
-            Close
+            Back
           </button>
         </div>
 

@@ -322,12 +322,12 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
     <div className=" mt-4">
       <div className="d-flex justify-content-between mb-3">
         <h3>{onRent ? "Edit On Rent" : "Add On Rent"}</h3>
-        <button className="btn btn-outline-secondary" onClick={onClose}>
-          Close
+        <button className="btn btn-secondary" onClick={onClose}>
+          Back
         </button>
       </div>
-      <form onSubmit={handleSubmit} className="card p-3 ">
-        <div className="row mb-3">
+      <form onSubmit={handleSubmit} className="card shadow-sm p-3 ">
+        <div className="row  mb-3">
           <div className="row">
             <div className="col-md-4">
               <div className="mb-3">
@@ -524,7 +524,7 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
           <div className="mb-3">
             <h5>Selected Items</h5>
             <div className="table-responsive">
-              <table className="table  table-sm table-bordered">
+              <table className="table  table-sm shadow-sm table-bordered">
                 <thead className="table-light">
                   <tr>
                     <th>Item Name</th>

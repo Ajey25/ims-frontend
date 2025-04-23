@@ -32,11 +32,11 @@ const PaymentDetails = ({ payment, onClose }) => {
       <div className="d-flex justify-content-between mb-3">
         <h3>Payment Details</h3>
         <button className="btn btn-secondary" onClick={onClose}>
-          Close
+          Back
         </button>
       </div>
 
-      <div className="card mb-4">
+      <div className="card shadow-sm mb-4">
         <div className="card-body">
           <div className="row g-3">
             {[
@@ -80,8 +80,8 @@ const PaymentDetails = ({ payment, onClose }) => {
           <h5 className="mb-0">Allocated Returns</h5>
         </div>
         <div className="card-body p-0">
-          <div className="table-responsive mobile-table-container px-0">
-            <table className="table  table-hover">
+          <div className="table-responsive px-0">
+            <table className="table table-sm shadow-sm">
               <thead className="table-light">
                 <tr>
                   <th>Return No.</th>

@@ -176,7 +176,7 @@ const Payment = () => {
           <div className="d-flex justify-content-end mb-3">
             <input
               type="text"
-              className="form-control"
+              className="form-control shadow0-sm"
               style={{ width: "250px" }}
               placeholder="Search Payments..."
               value={search}
@@ -185,7 +185,7 @@ const Payment = () => {
           </div>
 
           <div className="table-responsive" style={{ minHeight: "395px" }}>
-            <table className="table table-sm table-bordered table-striped text-center">
+            <table className="table table-sm table-bordered shadow-sm text-center">
               <thead className="table-dark">
                 <tr>
                   <th>Sr No.</th>

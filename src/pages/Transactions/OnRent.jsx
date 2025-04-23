@@ -326,7 +326,7 @@ const OnRent = () => {
           <div className="d-flex justify-content-end mb-2">
             <input
               type="text"
-              className="form-control "
+              className="form-control shadow-sm "
               style={{ width: "250px" }}
               placeholder="Search On Rent..."
               value={search}
@@ -335,8 +335,8 @@ const OnRent = () => {
           </div>
 
           <div className="table-responsive" style={{ minHeight: "395px" }}>
-            <table className="table table-sm table-bordered table-striped text-center">
-              <thead className="table-dark">
+            <table className="table table-sm table-bordered shadow-sm text-center">
+              <thead className="table-light">
                 <tr>
                   <th>#</th>
                   <th>On Rent No.</th>

@@ -469,11 +469,11 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3 className="modal-title">Add Payment</h3>
         <button className="btn btn-outline-secondary" onClick={onClose}>
-          Close
+          Back
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="card p-3">
+      <form onSubmit={handleSubmit} className="card p-3 shadow-sm">
         <div className="row mb-3">
           {/* Customer Name */}
           <div className="col-12 col-md-4">
@@ -624,8 +624,8 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
             )}
 
             <div className="table-responsive p-2">
-              <table className="table table-bordered">
-                <thead className="table-primary">
+              <table className="table table-bordered shadow-sm">
+                <thead className="table-light">
                   <tr>
                     <th>Return No</th>
                     <th>Date</th>

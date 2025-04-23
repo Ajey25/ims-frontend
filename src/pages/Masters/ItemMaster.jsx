@@ -198,7 +198,7 @@ const ItemMaster = () => {
       <div className="d-flex justify-content-between align-items-center mb-2">
         <h4>Item Master</h4>
         <button
-          className="btn animated-btn"
+          className="btn animated-btn "
           onClick={() => {
             setSelectedItem(null);
             setShowEditForm(true);
@@ -208,10 +208,10 @@ const ItemMaster = () => {
         </button>
       </div>
 
-      <div className="d-flex justify-content-end mb-3">
+      <div className="d-flex justify-content-end mb-3 ">
         <input
           type="text"
-          className="form-control"
+          className="form-control shadow-sm"
           style={{ width: "250px" }}
           placeholder="Search Item..."
           value={searchTerm}
@@ -220,8 +220,8 @@ const ItemMaster = () => {
       </div>
 
       <div className="table-responsive" style={{ minHeight: "395px" }}>
-        <table className="table table-sm table-bordered table-striped text-center">
-          <thead className="table-dark">
+        <table className="table table-sm table-bordered  text-center shadow-sm">
+          <thead className="table-light">
             <tr>
               <th>#</th>
               <th>Item Name</th>
