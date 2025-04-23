@@ -39,7 +39,12 @@ const Login = () => {
       // Redirect to Item Master page
       console.log("Logged in successfully");
       navigate("/app/masters/item-master");
-      toast.success("Logged in Successfully");
+      toast.success(
+        <span>
+          Welcome{" "}
+          <strong className="text-dark ">{`${data.user.firstName} ${data.user.lastName}`}</strong>
+        </span>
+      );
     } catch (err) {
       setError(err.message);
       setIsLoading(false);
