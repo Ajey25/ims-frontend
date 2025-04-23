@@ -44,7 +44,7 @@ const Login = () => {
   };
 
   return (
-    <div className="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light px-3 ">
+    <div className="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light px-4">
       <div
         className="row w-100 shadow-lg rounded-5 shadow-info overflow-hidden"
         style={{ maxWidth: "900px" }}
