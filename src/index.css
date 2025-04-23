@@ -202,9 +202,3 @@
 .shadow-info {
   box-shadow: 0 0 1rem rgba(139, 192, 236, 0.5) !important; /* Bootstrap "info" is #0dcaf0 */
 }
-
-@media (max-width: 767.98px) {
-  .shadow-info {
-    box-shadow: none !important;
-  }
-}
