@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { ToggleButton, ButtonGroup, Form } from "react-bootstrap";
 
-const ItemEditModal = ({ item, onSave, onClose }) => {
+const ItemEditModal = ({ item, onSave, onClose, isSaving }) => {
   const [itemName, setItemName] = useState("");
   const [itemCode, setItemCode] = useState("");
   const [description, setDescription] = useState("");
@@ -84,7 +84,7 @@ const ItemEditModal = ({ item, onSave, onClose }) => {
           <form onSubmit={handleSubmit}>
             <div className="row">
               <div className="col-md-6 mb-3">
-                <label className="form-label">
+                <label className={`form-label ${item ? "text-muted" : ""}`}>
                   Item Name <span className="text-danger">*</span>
                 </label>
                 <input
@@ -92,15 +92,17 @@ const ItemEditModal = ({ item, onSave, onClose }) => {
                   placeholder="Please enter item name"
                   className={`form-control ${
                     errors.itemName ? "is-invalid" : ""
-                  }`}
+                  } ${item ? "bg-light text-muted" : ""}`}
                   value={itemName}
                   onChange={handleInputChange(setItemName)}
-                  readOnly={!!item} // Make it read-only if item is provided
+                  readOnly={!!item}
                 />
+
                 {errors.itemName && (
                   <div className="invalid-feedback">{errors.itemName}</div>
                 )}
               </div>
+
               <div className="col-md-6 mb-3">
                 <label className="form-label">
                   Item Code <span className="text-danger">*</span>
@@ -203,8 +205,18 @@ const ItemEditModal = ({ item, onSave, onClose }) => {
             </div>
 
             <div className="d-flex justify-content-end">
-              <button type="submit" className="btn btn-primary">
-                {item ? "Update" : "Save"}
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={isSaving}
+              >
+                {isSaving
+                  ? item
+                    ? "Updating..."
+                    : "Saving..."
+                  : item
+                  ? "Update"
+                  : "Save"}
               </button>
             </div>
           </form>

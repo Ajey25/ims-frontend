@@ -13,6 +13,7 @@ const ItemMaster = () => {
   const [showEditForm, setShowEditForm] = useState(false);
   const [showDetailsView, setShowDetailsView] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isSaving, setIsSaving] = useState(false);
 
   const [rowsPerPage, setRowsPerPage] = useState(10); // Change this as needed
   useEffect(() => {
@@ -50,6 +51,7 @@ const ItemMaster = () => {
   };
 
   const handleAddItem = async (newItem) => {
+    setIsSaving(true);
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
@@ -73,10 +75,15 @@ const ItemMaster = () => {
       console.error("Error adding item:", error);
       // alert("Failed to add item, maybe item code is already used.");
       toast.warn("Failed to add item, item code is already being used.");
+    } finally {
+      setIsSaving(false);
+      console.log("Saving state reset");
+      // this ALWAYS runs, rain or shine
     }
   };
 
   const handleEditItem = async (updatedItem) => {
+    setIsSaving(true);
     try {
       const token = localStorage.getItem("token");
 
@@ -103,6 +110,10 @@ const ItemMaster = () => {
     } catch (error) {
       console.error("Error updating item:", error);
       toast.warn("Failed to update item, item code is already being used.");
+    } finally {
+      setIsSaving(false);
+      console.log("Saving state reset");
+      // this ALWAYS runs, rain or shine
     }
   };
 
@@ -165,6 +176,7 @@ const ItemMaster = () => {
           setShowEditForm(false);
           setSelectedItem(null);
         }}
+        isSaving={isSaving}
       />
     );
   }
@@ -211,7 +223,7 @@ const ItemMaster = () => {
         <table className="table table-sm table-bordered table-striped text-center">
           <thead className="table-dark">
             <tr>
-              <th>Sr No.</th>
+              <th>#</th>
               <th>Item Name</th>
               <th>Item Code</th>
               <th>Description</th>
