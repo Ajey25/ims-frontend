@@ -17,6 +17,8 @@ const Payment = () => {
   const [showForm, setShowForm] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [customers, setCustomers] = useState({});
+  const [isSaving, setIsSaving] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const [rowsPerPage, setRowsPerPage] = useState(10); // Change this as needed
@@ -73,6 +75,8 @@ const Payment = () => {
   };
 
   const savePayment = async (payment) => {
+    setIsSaving(true);
+
     try {
       setPayments((prevPayments) => [...prevPayments, payment]);
       setShowForm(false);
@@ -80,6 +84,10 @@ const Payment = () => {
     } catch (error) {
       console.error("Error saving payment:", error);
       toast.error("Error saving payment");
+    } finally {
+      setIsSaving(false);
+      console.log("Saving state reset");
+      // this ALWAYS runs, rain or shine
     }
   };
 
@@ -144,6 +152,7 @@ const Payment = () => {
           payment={selectedPayment}
           onSave={savePayment}
           onClose={() => setShowForm(false)}
+          isSaving={isSaving}
         />
       ) : showDetails ? (
         <PaymentDetails

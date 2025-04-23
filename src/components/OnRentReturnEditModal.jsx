@@ -6,7 +6,7 @@ import { FaTimes } from "react-icons/fa";
 import axios from "axios";
 import Select from "react-select";
 
-const OnRentReturnEditModal = ({ orr, onSave, onClose }) => {
+const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
   // Basic form states
   const [onRentReturnNo, setOnRentReturnNo] = useState("");
   const [onRentReturnDate, setOnRentReturnDate] = useState("");
@@ -1128,8 +1128,14 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose }) => {
         )}
 
         <div className="d-flex justify-content-end">
-          <Button variant="primary" type="submit" disabled={saveClick}>
-            {orr ? "Update" : "Save"}
+          <Button variant="primary" type="submit" disabled={isSaving}>
+            {isSaving
+              ? orr
+                ? "Updating..."
+                : "Saving..."
+              : orr
+              ? "Update"
+              : "Save"}{" "}
           </Button>
         </div>
       </form>

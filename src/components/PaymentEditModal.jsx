@@ -6,7 +6,7 @@ import Select from "react-select";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const PaymentEditModal = ({ onSave, onClose }) => {
+const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
   const [customerName, setCustomerName] = useState("");
   const [customerId, setCustomerId] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");

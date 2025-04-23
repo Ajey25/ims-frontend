@@ -14,6 +14,7 @@ const OnRentReturn = () => {
   const returnNumber = searchParams.get("returnNumber");
   const [orr, setOrr] = useState([]);
   const [search, setSearch] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
   const [selectedOrr, setSelectedOrr] = useState(null);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -67,6 +68,8 @@ const OnRentReturn = () => {
   };
 
   const saveOrr = async (orr) => {
+    setIsSaving(true);
+
     try {
       const orrData = {
         onRentReturnDate: orr.onRentReturnDate,
@@ -116,6 +119,10 @@ const OnRentReturn = () => {
       const errorMessage = error.response?.data?.message || error.message;
       // alert(`Failed to save on rent return: ${errorMessage}`);\
       toast.error(`Failed to save on rent return: ${errorMessage}`);
+    } finally {
+      setIsSaving(false);
+      console.log("Saving state reset");
+      // this ALWAYS runs, rain or shine
     }
   };
 
@@ -185,6 +192,7 @@ const OnRentReturn = () => {
           orr={selectedOrr}
           onSave={saveOrr}
           onClose={() => setShowEditForm(false)}
+          isSaving={isSaving}
         />
       ) : showDetails ? (
         <OnRentReturnDetailsModal
