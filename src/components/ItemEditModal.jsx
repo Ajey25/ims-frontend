@@ -92,10 +92,11 @@ const ItemEditModal = ({ item, onSave, onClose, isSaving }) => {
                   placeholder="Please enter item name"
                   className={`form-control ${
                     errors.itemName ? "is-invalid" : ""
-                  } ${item ? "bg-light text-muted" : ""}`}
+                  } ${item ? " bg-light text-secondary" : ""}`}
                   value={itemName}
                   onChange={handleInputChange(setItemName)}
                   readOnly={!!item}
+                  disabled={!!item} // Disable input if item is being edited
                 />
 
                 {errors.itemName && (

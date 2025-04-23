@@ -239,7 +239,7 @@ const CustomerMaster = () => {
       </div>
 
       <div className="table-responsive " style={{ minHeight: "395px" }}>
-        <table className="table table-sm shadow-sm table-bordered table-striped text-center">
+        <table className="table table-sm shadow-sm table-bordered  text-center">
           <thead className="table-light">
             <tr>
               <th>#</th>
