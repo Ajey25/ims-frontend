@@ -429,7 +429,7 @@ const Reports = () => {
 
                               const onRentNo = record.onRentNo; // Fallback in case function fails
                               const url = `${
-                                import.meta.env.VITE_API_BASE_URL
+                                import.meta.env.VITE_API_BASE_URL2
                               }/app/transactions/onrent?onRentNo=${onRentNo}`;
 
                               window.open(url, "_blank");

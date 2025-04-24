@@ -652,7 +652,9 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
                             return;
                           }
 
-                          const url = `http://localhost:5173/app/transactions/onrentreturn?returnNumber=${ret.returnNumber}`;
+                          const url = `${
+                              import.meta.env.VITE_API_BASE_URL2
+                            }/app/transactions/onrentreturn?returnNumber=${ret.returnNumber}`;
                           window.open(url, "_blank");
                         }}
                       >
