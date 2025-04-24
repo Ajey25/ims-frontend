@@ -437,13 +437,23 @@ const Reports = () => {
                           >
                             {record?.onRentNo}
                           </td>
-                          <td>{record.onRentDate}</td>
+                          <td>
+                            {" "}
+                            {new Date(record.onRentDate).toLocaleDateString(
+                              "en-GB"
+                            )}
+                          </td>
                           <td>{record.itemName}</td>
                           <td>{record.uom}</td>
                           <td>{record.totalQty}</td>
                           <td>{record.returnQty}</td>
                           <td>{record.balanceQty}</td>
-                          <td>{record.onRentReturnDate}</td>
+                          <td>
+                            {" "}
+                            {new Date(
+                              record.onRentReturnDate
+                            ).toLocaleDateString("en-GB")}
+                          </td>
                           <td>{record.perDayRate}</td>
                           <td>{record.usedDays}</td>
                           <td>{record.amount}</td>
@@ -484,7 +494,12 @@ const Reports = () => {
                       {filteredPaymentData.map((payment, index) => (
                         <tr key={index}>
                           <td>{index + 1}</td>
-                          <td>{payment.paymentDate}</td>
+                          <td>
+                            {" "}
+                            {new Date(payment.paymentDate).toLocaleDateString(
+                              "en-GB"
+                            )}
+                          </td>
                           <td>{payment.paymentType}</td>
                           <td>{payment.paymentAmount}</td>
                         </tr>
