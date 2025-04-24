@@ -1025,7 +1025,9 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
                             }
 
                             const onRentNo = onRentRecord.onRentNo; // Fallback in case function fails
-                            const url = `http://localhost:5173/app/transactions/onrent?onRentNo=${onRentNo}`;
+                            const url = `${
+                              import.meta.env.VITE_API_BASE_URL2
+                            }/app/transactions/onrent?onRentNo=${onRentNo}`;
 
                             window.open(url, "_blank");
                           }}
