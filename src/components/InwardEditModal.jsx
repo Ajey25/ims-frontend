@@ -338,16 +338,17 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
       <form onSubmit={handleSubmit} className="card p-3">
         <div className="row mb-3">
           <div className="col-md-6">
-            <div className="mb-3">
+            <div className="mb-3 ">
               <label className="form-label">Inward Date</label>
               <br />
               <DatePicker
                 selected={inwardDate}
                 onChange={handleDateChange}
-                dateFormat="dd/MM/yyyy" // Show the date in dd/mm/yyyy format
+                dateFormat="dd/MM/yyyy"
                 className="form-control date"
                 placeholderText="dd/mm/yyyy"
-              />{" "}
+              />
+
               <br />
               {errors.inwardDate && (
                 <small className="text-danger">{errors.inwardDate}</small>

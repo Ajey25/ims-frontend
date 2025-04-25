@@ -208,3 +208,10 @@
     box-shadow: none !important;
   }
 }
+.react-datepicker-wrapper,
+.react-datepicker__input-container,
+.react-datepicker__input-container input {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
