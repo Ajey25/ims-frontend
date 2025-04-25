@@ -272,7 +272,7 @@ const Inward = () => {
             <table className="table table-sm table-bordered shadow-sm text-center">
               <thead className="table-light">
                 <tr>
-                  <th>#</th>
+                  <th>Sr No.</th>
                   <th>Inward No</th>
                   <th>Inward Date</th>
                   {/* <th>Items</th> */}

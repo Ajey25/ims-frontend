@@ -6,6 +6,31 @@ import PdfImage from "../assets/pdf-icon.png";
 
 const InwardDetailsModal = ({ inward, itemMap, onClose }) => {
   if (!inward) return null;
+  const handleOpenAttachment = (base64Data, mimeType = "image/jpeg") => {
+    const byteString = atob(base64Data.split(",")[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    const blob = new Blob([ab], { type: mimeType });
+    const blobUrl = URL.createObjectURL(blob);
+    window.open(blobUrl, "_blank");
+  };
+  const openBase64InNewTab = (base64DataUrl) => {
+    const mime = base64DataUrl.match(/data:([^;]+);/)[1]; // gets mime type
+    const byteString = atob(base64DataUrl.split(",")[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    const blob = new Blob([ab], { type: mime });
+    const blobUrl = URL.createObjectURL(blob);
+    window.open(blobUrl, "_blank");
+  };
 
   return (
     <div className="container mt-4">
@@ -63,13 +88,19 @@ const InwardDetailsModal = ({ inward, itemMap, onClose }) => {
                 <div>
                   {inward.attachment.startsWith("data:application/pdf") ? (
                     <a
-                      href={inward.attachment}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openBase64InNewTab(inward.attachment);
+                      }}
                     >
                       <img
-                        src={PdfImage}
-                        alt="PDF Attachment"
+                        src={
+                          inward.attachment.startsWith("data:application/pdf")
+                            ? PdfImage
+                            : inward.attachment
+                        }
+                        alt="Attachment"
                         className="img-fluid rounded"
                         style={{
                           maxWidth: "100px",
@@ -80,7 +111,15 @@ const InwardDetailsModal = ({ inward, itemMap, onClose }) => {
                     </a>
                   ) : (
                     <a
-                      href={inward.attachment}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleOpenAttachment(
+                          inward.attachment,
+                          inward.attachment.startsWith("data:application/pdf")
+                            ? "application/pdf"
+                            : "image/jpeg"
+                        );
+                      }}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

@@ -9,9 +9,13 @@ import { FaTimes } from "react-icons/fa";
 const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
   const [inwardNo, setInwardNo] = useState("");
   const [inwardDate, setInwardDate] = useState(() => {
-    const today = new Date().toISOString("").split("T")[0]; // Get YYYY-MM-DD format
-    return today;
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`; // we store in ISO: yyyy-mm-dd
   });
+
   const [items, setItems] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [itemOptions, setItemOptions] = useState([]);
@@ -111,8 +115,11 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
     let tempErrors = {};
 
     // Validate Inward Date
-    if (!inwardDate?.trim()) tempErrors.inwardDate = "Inward Date is required.";
-
+    const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(inwardDate); // Regex for yyyy-mm-dd format
+    if (!isValidDate) {
+      tempErrors.inwardDate =
+        "Inward Date is in an invalid format. Please use dd/mm/yyyy.";
+    }
     // Validate Selected Items
     if (!selectedItems || Object.keys(selectedItems).length === 0) {
       tempErrors.items = "Please add at least one item.";
@@ -140,7 +147,7 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
 
         // Ensure Unit Rate is valid
         if (!data.rate || data.rate < 0) {
-          itemError.rate = "Unit Rate must be ≥ 0";
+          itemError.rate = "Unit Rate must be > 0";
         }
 
         // Store item errors if any exist
