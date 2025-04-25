@@ -242,7 +242,7 @@ const CustomerMaster = () => {
         <table className="table table-sm shadow-sm table-bordered  text-center">
           <thead className="table-light">
             <tr>
-              <th>#</th>
+              <th>Sr No.</th>
               <th>Customer Name</th>
               <th>Email</th>
               <th>Mobile</th>

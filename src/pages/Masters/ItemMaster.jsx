@@ -223,7 +223,7 @@ const ItemMaster = () => {
         <table className="table table-sm table-bordered  text-center shadow-sm">
           <thead className="table-light">
             <tr>
-              <th>#</th>
+              <th>Sr No.</th>
               <th>Item Name</th>
               <th>Item Code</th>
               <th>Description</th>

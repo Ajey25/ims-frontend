@@ -25,12 +25,14 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
   }, [customer]);
 
   const validateCustomerName = (name) => {
-    const re = /^[a-zA-Z0-9 _-]+$/;
+    const re = /^[a-zA-Z0-9 _-]+$/; // Still allows alphanumerics, _ and -
     return re.test(name);
   };
 
+  const startsWithNumber = (str) => /^[0-9]/.test(str);
+
   const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const re = /^[^\s@]+@[^\s@]+\.(com|org|net|edu|gov|in)$/i;
     return re.test(email);
   };
 
@@ -52,24 +54,28 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
   const validate = () => {
     let tempErrors = {};
 
-    // Customer Name validation
     if (!customerName.trim()) {
       tempErrors.customerName = "Customer Name is required";
-    } else if (customerName.length < 3) {
+    } else if (customerName.length < 4) {
       tempErrors.customerName =
-        "Customer Name must be at least 3 characters long";
+        "Customer Name must be at least 4 characters long";
+    } else if (customerName.length > 20) {
+      tempErrors.customerName = "Customer Name must not exceed 20 characters.";
     } else if (!validateCustomerName(customerName)) {
       tempErrors.customerName =
         "Customer Name should not contain special characters except _ and -";
     } else if (customerName.startsWith(" ")) {
       tempErrors.customerName = "Customer Name should not start with a space";
+    } else if (startsWithNumber(customerName)) {
+      tempErrors.customerName = "Customer Name should not start with a number";
     }
 
     // Email validation
     if (!email.trim()) {
       tempErrors.email = "Email is required";
     } else if (!validateEmail(email)) {
-      tempErrors.email = "Please enter a valid email address";
+      tempErrors.email =
+        "Please enter a valid email address (e.g. user@example.com).";
     } else if (email.startsWith(" ")) {
       tempErrors.email = "Email should not start with a space";
     }
@@ -96,6 +102,12 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
     // Address validation
     if (!address.trim()) {
       tempErrors.address = "Address is required";
+    } else if (address.startsWith(" ")) {
+      tempErrors.address = "Address should not start with a space";
+    } else if (address.length < 4) {
+      tempErrors.address = "Address must be at least 4 characters long";
+    } else if (address.length > 40) {
+      tempErrors.address = "Address must not exceed 40 characters";
     }
 
     if (!status) {

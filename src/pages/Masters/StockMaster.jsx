@@ -62,7 +62,12 @@ const ItemMaster = () => {
   };
 
   const handleFilterChange = (selected) => {
-    if (!selected) return setSelectedFilters([]);
+    setShowTable(false); // Hide the table whenever filters change
+
+    if (!selected || selected.length === 0) {
+      return setSelectedFilters([]);
+    }
+
     const isSelectAll = selected.some((s) => s.value === "*");
     const validOptions = options.filter((o) => o.value !== "*");
 

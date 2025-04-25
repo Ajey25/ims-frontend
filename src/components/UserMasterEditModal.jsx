@@ -38,13 +38,22 @@ const UserMasterEditModal = ({ user, onSave, onClose, isSaving }) => {
 
     if (!formData.firstName || formData.firstName.length < 3) {
       newErrors.firstName = "First Name must be at least 3 characters long.";
+    } else if (formData.firstName.length > 20) {
+      newErrors.firstName = "First Name must not exceed 20 characters.";
     }
     if (!formData.lastName || formData.lastName.length < 3) {
       newErrors.lastName = "Last Name must be at least 3 characters long.";
+    } else if (formData.lastName.length > 20) {
+      newErrors.lastName = "Last Name must not exceed 20 characters.";
     }
-    if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Enter a valid email address.";
+
+    if (
+      !formData.email ||
+      !/^[^\s@]+@[^\s@]+\.(com|org|net|edu|gov|in)$/i.test(formData.email)
+    ) {
+      newErrors.email = "Enter a valid email address (e.g. user@example.com).";
     }
+
     if (!formData.mobileNo || !/^[0-9]{10}$/.test(formData.mobileNo)) {
       newErrors.mobileNo =
         "Mobile number must be exactly 10 digits and contain only numbers.";

@@ -28,6 +28,8 @@ const ItemEditModal = ({ item, onSave, onClose, isSaving }) => {
       tempErrors.itemName = "Item Name should not contain special characters.";
     } else if (itemName.startsWith(" ")) {
       tempErrors.itemName = "Item Name should not start with a space.";
+    } else if (itemName.length > 20) {
+      tempErrors.itemName = "Item Name should not exceed 20 characters.";
     }
 
     if (!itemCode.trim()) {
@@ -36,6 +38,8 @@ const ItemEditModal = ({ item, onSave, onClose, isSaving }) => {
       tempErrors.itemCode = "Item Code should not contain special characters.";
     } else if (itemCode.startsWith(" ")) {
       tempErrors.itemCode = "Item Code should not start with a space.";
+    } else if (itemCode.length > 20) {
+      tempErrors.itemCode = "Item Code should not exceed 20 characters.";
     }
 
     if (!description.trim()) {

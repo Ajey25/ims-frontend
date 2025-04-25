@@ -160,7 +160,7 @@ const UserMaster = () => {
         <table className="table table-sm shadow-sm table-bordered  text-center">
           <thead className="table-light">
             <tr>
-              <th>#</th>
+              <th>Sr No.</th>
               <th>First Name</th>
               <th>Last Name</th>
               <th>Email</th>
