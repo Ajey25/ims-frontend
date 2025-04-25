@@ -56,7 +56,7 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
     };
     fetchData();
   }, [inward]);
-
+  console.log();
   useEffect(() => {
     if (inward) {
       // Set inward date
