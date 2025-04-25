@@ -28,6 +28,16 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
   const handleDateChange = (date) => {
     setInwardDate(date);
   };
+  const handleDateChangeRaw = (e) => {
+    const value = e.target.value;
+    if (/^\d{8}$/.test(value)) {
+      const day = value.slice(0, 2);
+      const month = value.slice(2, 4);
+      const year = value.slice(4);
+      const date = new Date(`${year}-${month}-${day}`);
+      setInwardDate(date);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -347,6 +357,7 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
                 dateFormat="dd/MM/yyyy"
                 className="form-control date"
                 placeholderText="dd/mm/yyyy"
+                onChangeRaw={handleDateChangeRaw}
               />
 
               <br />
