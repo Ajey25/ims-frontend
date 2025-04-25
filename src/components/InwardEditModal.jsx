@@ -5,16 +5,11 @@ import { Button, Table, Dropdown, Form } from "react-bootstrap";
 import axios from "axios";
 import Pdf from "../assets/pdf-icon.png";
 import { FaTimes } from "react-icons/fa";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
   const [inwardNo, setInwardNo] = useState("");
-  const [inwardDate, setInwardDate] = useState(() => {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const dd = String(today.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`; // we store in ISO: yyyy-mm-dd
-  });
+  const [inwardDate, setInwardDate] = useState(new Date());
 
   const [items, setItems] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -30,6 +25,9 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
   const [errors, setErrors] = useState({});
   const [isLoadingInwardNo, setIsLoadingInwardNo] = useState(false);
 
+  const handleDateChange = (date) => {
+    setInwardDate(date);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -114,13 +112,12 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
   const validate = () => {
     let tempErrors = {};
 
-    // Validate Inward Date
-    const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(inwardDate); // Regex for yyyy-mm-dd format
-    if (!isValidDate) {
-      tempErrors.inwardDate =
-        "Inward Date is in an invalid format. Please use dd/mm/yyyy.";
+    // ✅ Validate Inward Date format (stored as yyyy-MM-dd)
+    if (!inwardDate || isNaN(new Date(inwardDate).getTime())) {
+      tempErrors.inwardDate = "Inward Date is invalid. Please use dd/mm/yyyy.";
     }
-    // Validate Selected Items
+
+    // ✅ Validate Selected Items
     if (!selectedItems || Object.keys(selectedItems).length === 0) {
       tempErrors.items = "Please add at least one item.";
     } else {
@@ -130,27 +127,19 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
       Object.entries(selectedItems).forEach(([id, data]) => {
         let itemError = {};
 
-        // Ensure UOM is selected
         if (!data.uom) {
           itemError.uom = "UOM must be selected";
         }
-
-        // Validate Quantity (qty) - Must be greater than 0
         if (!data.qty || data.qty <= 0) {
           itemError.qty = "Quantity must be greater than 0";
         }
-
-        // Validate Weight - Must be greater than 0
         if (!data.weight || data.weight <= 0) {
           itemError.weight = "Weight must be greater than 0";
         }
-
-        // Ensure Unit Rate is valid
         if (!data.rate || data.rate < 0) {
           itemError.rate = "Unit Rate must be > 0";
         }
 
-        // Store item errors if any exist
         if (Object.keys(itemError).length > 0) {
           hasItemErrors = true;
           newItemErrors[id] = itemError;
@@ -160,15 +149,12 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
       if (hasItemErrors) tempErrors.itemErrors = newItemErrors;
     }
 
-    // Validate Total Amount
+    // ✅ Validate Total Amount
     if (!totalAmount || totalAmount <= 0) {
       tempErrors.totalAmount = "Total amount must be > 0";
     }
 
-    // Set errors
     setErrors(tempErrors);
-
-    // Return false if there are validation errors
     return Object.keys(tempErrors).length === 0;
   };
 
@@ -354,13 +340,15 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Inward Date</label>
-              <input
-                type="date"
-                className="form-control"
-                value={inwardDate}
-                onChange={(e) => setInwardDate(e.target.value)}
-                onFocus={(e) => e.target.showPicker()} // Forces the date picker to open
-              />
+              <br />
+              <DatePicker
+                selected={inwardDate}
+                onChange={handleDateChange}
+                dateFormat="dd/MM/yyyy" // Show the date in dd/mm/yyyy format
+                className="form-control date"
+                placeholderText="dd/mm/yyyy"
+              />{" "}
+              <br />
               {errors.inwardDate && (
                 <small className="text-danger">{errors.inwardDate}</small>
               )}
