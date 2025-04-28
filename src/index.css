@@ -215,3 +215,37 @@
   box-sizing: border-box;
 }
 /* Target the toast container */
+@keyframes dropdownAnimation {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-dropdown {
+  animation: dropdownAnimation 0.3s ease-out;
+}
+:root {
+  --background-color: #bbb; /* Default light grey */
+}
+
+/* This class will apply the variable */
+body,
+.app-background {
+  background-color: var(--background-color);
+  transition: background-color 0.3s ease;
+}
+.dim-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2); /* 10% black */
+  pointer-events: none; /* So user can still click through */
+  z-index: 9999;
+}

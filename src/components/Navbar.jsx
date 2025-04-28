@@ -2,8 +2,17 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { clearAdminLoginStatus } from "../utils/localStorageUtils";
 import { FaBars, FaPowerOff } from "react-icons/fa";
+import { FaRegLightbulb, FaLightbulb } from "react-icons/fa"; // Importing icons from React Icons
+import { motion } from "framer-motion"; // If you want to animate it
 
-const Navbar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
+const Navbar = ({
+  isSidebarOpen,
+  toggleSidebar,
+  isMobile,
+  theme,
+  setTheme,
+  toggleTheme,
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
@@ -115,26 +124,82 @@ const Navbar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
           {/* Dropdown Menu */}
           {showDropdown && (
             <div
-              className="position-absolute bg-white text-black shadow rounded p-2"
-              style={{
-                top: "50px",
-                right: "-5px",
-                width: "150px",
-                border: "1px solid #ccc",
-              }}
+              className="position-absolute d-flex flex-column align-items-center shadow-lg  "
+              style={{ top: "50px", right: "-20px", width: "250px" }}
             >
-              <div className="text-center mb-2">
-                <strong>
-                  {user?.firstName} {user?.lastName}
-                </strong>
-              </div>
-              <button
-                className="btn btn-link p-1 text-danger w-100"
-                onClick={handleLogout}
-                title="Logout"
+              <div
+                className="text-black  shadow-lg rounded p-3 d-flex flex-column align-items-center position-relative animate-dropdown"
+                style={{
+                  width: "100%",
+                  border: "1px solid #ccc",
+                  backgroundColor: "#fff", // <-- darker than bg-light
+                }}
               >
-                <FaPowerOff size={22} /> Logout
-              </button>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "-10px",
+                    left: "80%",
+                    transform: "translateX(-0%)",
+                    width: 0,
+                    height: 0,
+                    borderLeft: "10px solid transparent",
+                    borderRight: "10px solid transparent",
+                    borderBottom: "10px solid white",
+                  }}
+                ></div>
+
+                <div className="mb-3 text-center fw-semibold">
+                  {user?.firstName} {user?.lastName}
+                </div>
+                <div
+                  className="bg-light shadow-lg rounded w-100 p-2 border d-flex align-items-center justify-content-center mt-2"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={toggleTheme}
+                  title="Toggle Theme"
+                >
+                  <motion.div
+                    animate={{ scale: theme === "light" ? 1.2 : 1 }} // Scale animation when theme changes
+                    transition={{
+                      duration: 0.3,
+                      type: "spring",
+                      stiffness: 300,
+                    }}
+                    className="d-flex align-items-center"
+                  >
+                    {/* Bulb icon changes based on the theme */}
+                    {theme === "light" ? (
+                      <FaLightbulb
+                        className="text-warning" // Orange color for "light" theme
+                        size={24}
+                      />
+                    ) : (
+                      <FaRegLightbulb
+                        className="text-muted" // Gray color for "dark" theme
+                        size={24}
+                      />
+                    )}
+
+                    <span className="fw-semibold ms-2">
+                      {theme === "light" ? "Turn Off Lights" : "Turn On Lights"}
+                    </span>
+                  </motion.div>
+                </div>
+
+                <div
+                  className="bg-light shadow-lg rounded w-100 p-2 border d-flex align-items-center justify-content-center"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={handleLogout}
+                  title="Logout"
+                >
+                  <FaPowerOff className="text-danger me-2" size={20} />
+                  <span className="text-danger fw-semibold">Logout</span>
+                </div>
+              </div>
             </div>
           )}
         </div>

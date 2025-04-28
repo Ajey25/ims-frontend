@@ -6,8 +6,18 @@ import Sidebar from "./Sidebar";
 
 const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isDimmed, setIsDimmed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const location = useLocation();
+  const [theme, setTheme] = useState("light"); // default
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    setIsDimmed((prev) => !prev);
+    document.documentElement.style.setProperty(
+      "--background-color",
+      theme === "light" ? "#ccc" : "#e5e5e5" // Switch based on current theme
+    );
+  };
 
   // Handle window resize
   useEffect(() => {
@@ -24,7 +34,12 @@ const Layout = () => {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
-    <div className="d-flex vh-100 position-relative">
+    <div
+      className="d-flex vh-100 position-relative "
+      style={{
+        backgroundColor: theme === "light" ? "#e5e5e5" : "#ccc",
+      }}
+    >
       {/* Sidebar */}
       <div
         className={`sidebar-wrapper ${isMobile ? "mobile" : ""} ${
@@ -52,6 +67,9 @@ const Layout = () => {
         />
       )}
 
+      {/* Dimming Overlay */}
+      {isDimmed && <div className="dim-overlay"></div>}
+
       {/* Main Content */}
       <div
         className="flex-grow-1 d-flex flex-column"
@@ -74,15 +92,15 @@ const Layout = () => {
               isSidebarOpen={isSidebarOpen}
               toggleSidebar={toggleSidebar}
               isMobile={isMobile}
+              theme={theme}
+              setTheme={setTheme}
+              toggleTheme={toggleTheme}
             />
           </motion.div>
         </AnimatePresence>
 
         {/* Animated Page Content */}
-        <div
-          className="flex-grow-1 overflow-auto"
-          style={{ backgroundColor: "#e5e5e5" }}
-        >
+        <div className="flex-grow-1 overflow-auto">
           <div className="container-fluid p-3">
             <AnimatePresence mode="wait">
               <motion.div

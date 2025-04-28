@@ -42,9 +42,12 @@ const Login = () => {
       console.log("Logged in successfully");
       navigate("/app/masters/item-master");
       toast.success(
-        <div className="d-flex align-items-center" style={{ width: "300px" }}>
+        <div
+          className="d-flex align-items-center text-wrap"
+          style={{ width: "300px" }}
+        >
           <span>Welcome</span>
-          <strong className="text-dark mx-2">{`${data.user.firstName} ${data.user.lastName}`}</strong>
+          <strong className="text-dark mx-2 text-capitalize">{`${data.user.firstName} `}</strong>
           <img
             style={{ height: "30px", width: "30px", objectFit: "contain" }}
             src={Rocket}
