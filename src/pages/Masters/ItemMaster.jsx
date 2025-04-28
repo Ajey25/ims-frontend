@@ -194,7 +194,7 @@ const ItemMaster = () => {
   }
 
   return (
-    <div className="responsive-container px-0 ">
+    <div className="responsive-container px-0">
       <div className="d-flex justify-content-between align-items-center mb-2">
         <h4>Item Master</h4>
         <button
@@ -219,7 +219,7 @@ const ItemMaster = () => {
         />
       </div>
 
-      <div className="table-responsie card " style={{ minHeight: "395px" }}>
+      <div className="table-responsive" style={{ minHeight: "395px" }}>
         <table className="table table-sm table-bordered  text-center shadow-sm">
           <thead className="table-light">
             <tr>
@@ -287,16 +287,16 @@ const ItemMaster = () => {
             )}
           </tbody>
         </table>
-        <div className="pagination-container">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            setCurrentPage={setCurrentPage}
-          />
-        </div>
       </div>
 
       {/* Responsive Pagination Margin */}
+      <div className="pagination-container">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          setCurrentPage={setCurrentPage}
+        />
+      </div>
     </div>
   );
 };

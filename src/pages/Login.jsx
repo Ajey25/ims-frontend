@@ -43,10 +43,10 @@ const Login = () => {
       navigate("/app/masters/item-master");
       toast.success(
         <div className="d-flex align-items-center" style={{ width: "300px" }}>
-          <span>Welcome Back</span>
+          <span>Welcome</span>
           <strong className="text-dark mx-2">{`${data.user.firstName} ${data.user.lastName}`}</strong>
           <img
-            style={{ height: "35px", width: "40px", objectFit: "contain" }}
+            style={{ height: "30px", width: "30px", objectFit: "contain" }}
             src={Rocket}
             alt="rocket"
           />
