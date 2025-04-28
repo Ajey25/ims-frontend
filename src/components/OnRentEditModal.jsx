@@ -5,9 +5,10 @@ import { Button, Table, Dropdown, Form } from "react-bootstrap";
 import axios from "axios";
 import { FaTimes } from "react-icons/fa";
 import Select from "react-select";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
-  const [onRentNo, setOnRentNo] = useState("");
+  const [onRentNo, setOnRentNo] = useState(new Date());
   const [onRentDate, setOnRentDate] = useState("");
   const [customerId, setCustomerId] = useState("");
   const [customerName, setCustomerName] = useState("");
@@ -30,6 +31,45 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
 
   const [errors, setErrors] = useState({});
   // const [totalAmount, setTotalAmount] = useState(0);
+  const handleDateChange = (date) => {
+    setOnRentDate(date);
+  };
+  const handleDateChangeRaw = (e) => {
+    const value = e.target.value;
+
+    // Regex to validate both dd/MM/yyyy and ddMMyyyy formats
+    const regexWithSlashes = /^(\d{2})\/(\d{2})\/(\d{4})$/; // dd/MM/yyyy format
+    const regexWithoutSlashes = /^(\d{2})(\d{2})(\d{4})$/; // ddMMyyyy format
+
+    let date = null;
+
+    // Check if the input is in the dd/MM/yyyy format
+    if (regexWithSlashes.test(value)) {
+      const [day, month, year] = value.split("/");
+      date = new Date(`${year}-${month}-${day}`);
+    }
+    // Check if the input is in the ddMMyyyy format
+    else if (regexWithoutSlashes.test(value)) {
+      const [day, month, year] = [
+        value.slice(0, 2),
+        value.slice(2, 4),
+        value.slice(4),
+      ];
+      date = new Date(`${year}-${month}-${day}`);
+    }
+
+    // If the date is valid, update the state
+    if (date && !isNaN(date.getTime())) {
+      setOnRentDate(date);
+      setErrors((prevErrors) => ({ ...prevErrors, onRentDate: "" })); // Clear any previous error
+    } else {
+      setOnRentDate(null); // Reset date if invalid
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        onRentDate: "",
+      }));
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -113,14 +153,79 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
   const validate = () => {
     let tempErrors = {};
 
-    if (!onRentDate.trim()) {
-      tempErrors.onRentDate = "On Rent Date is required.";
+    if (!onRentDate) {
+      tempErrors.onRentDate = "Invalid date format. Please use dd/MM/yyyy.";
+    } else {
+      // Convert onRentDate to a Date object
+      const selectedDate = new Date(onRentDate);
+
+      // Get today's date
+      const today = new Date();
+
+      // Reset the time part of both dates
+      selectedDate.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+
+      // Check if the selected date is tomorrow or in the future
+      if (selectedDate > today) {
+        tempErrors.onRentDate = "Future date cannot be selected.";
+      }
     }
 
     if (!customerName) {
       tempErrors.customerName = "Customer Name is required.";
     }
 
+    const vehicleErrors = {};
+
+    const validateLength = (value, fieldName) => {
+      if (!value || value.trim().length < 3) {
+        return `${fieldName} must be at least 3 characters long.`;
+      }
+      if (value.trim().length > 20) {
+        return `${fieldName} must be less than 20 characters.`;
+      }
+      return null;
+    };
+
+    // Only validate vehicle details if they are provided
+    if (vehicleDetails.vehicleName) {
+      const vehicleNameError = validateLength(
+        vehicleDetails.vehicleName,
+        "Vehicle Name"
+      );
+      if (vehicleNameError) vehicleErrors.vehicleName = vehicleNameError;
+    }
+
+    if (vehicleDetails.vehicleNo) {
+      const vehicleNoError = validateLength(
+        vehicleDetails.vehicleNo,
+        "Vehicle Number"
+      );
+      if (vehicleNoError) vehicleErrors.vehicleNo = vehicleNoError;
+    }
+
+    if (vehicleDetails.driverName) {
+      const driverNameError = validateLength(
+        vehicleDetails.driverName,
+        "Driver Name"
+      );
+      if (driverNameError) vehicleErrors.driverName = driverNameError;
+    }
+
+    // Mobile number validation, if it's provided
+    if (vehicleDetails.mobileNo) {
+      if (!/^[6-9]\d{9}$/.test(vehicleDetails.mobileNo.trim())) {
+        vehicleErrors.mobileNo = "Enter a valid 10-digit mobile number.";
+      }
+    }
+
+    // If there are any vehicle errors, add them to the main errors object
+    if (Object.keys(vehicleErrors).length > 0) {
+      tempErrors.vehicleDetails = vehicleErrors;
+    }
+
+    // Item selection validation
     if (Object.keys(selectedItems).length === 0) {
       tempErrors.items = "Please select at least one item.";
     } else {
@@ -334,12 +439,13 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
                 <label className="form-label">
                   On Rent Date <span className="text-danger">*</span>
                 </label>
-                <input
-                  type="date"
+                <DatePicker
+                  selected={onRentDate}
+                  onChange={handleDateChange}
+                  onChangeRaw={handleDateChangeRaw}
+                  dateFormat="dd/MM/yyyy"
+                  placeholderText="dd/MM/yyyy"
                   className="form-control"
-                  value={onRentDate}
-                  onChange={(e) => setOnRentDate(e.target.value)}
-                  onFocus={(e) => e.target.showPicker()}
                 />
                 {errors.onRentDate && (
                   <small className="text-danger">{errors.onRentDate}</small>
@@ -358,6 +464,11 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
                     handleVehicleDetailsChange("vehicleName", e.target.value)
                   }
                 />
+                {errors.vehicleDetails?.vehicleName && (
+                  <small className="text-danger">
+                    {errors.vehicleDetails.vehicleName}
+                  </small>
+                )}
               </div>
             </div>
 
@@ -372,6 +483,11 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
                     handleVehicleDetailsChange("vehicleNo", e.target.value)
                   }
                 />
+                {errors.vehicleDetails?.vehicleNo && (
+                  <small className="text-danger">
+                    {errors.vehicleDetails.vehicleNo}
+                  </small>
+                )}
               </div>
             </div>
 
@@ -410,6 +526,11 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
                     handleVehicleDetailsChange("driverName", e.target.value)
                   }
                 />
+                {errors.vehicleDetails?.driverName && (
+                  <small className="text-danger">
+                    {errors.vehicleDetails.driverName}
+                  </small>
+                )}
               </div>
             </div>
 
@@ -424,6 +545,11 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
                     handleVehicleDetailsChange("mobileNo", e.target.value)
                   }
                 />
+                {errors.vehicleDetails?.mobileNo && (
+                  <small className="text-danger">
+                    {errors.vehicleDetails.mobileNo}
+                  </small>
+                )}
               </div>
             </div>
           </div>

@@ -11,7 +11,7 @@ const OnRentDetailsView = ({ onRent, onClose }) => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-2">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3>On Rent Details - {onRent.onRentNo}</h3>
         <button className="btn btn-secondary" onClick={onClose}>
@@ -22,8 +22,8 @@ const OnRentDetailsView = ({ onRent, onClose }) => {
       <div className="row">
         {/* Return Details */}
         <div className="col-12 col-md-6">
-          <div className="card shadow-sm mb-3">
-            <div className="card-body">
+          <div className="card shadow-lg mb-2">
+            <div className="card-body" style={{ minHeight: "180px" }}>
               <h5 className="card-title text-primary">Return Details</h5>
               <div className="row">
                 {[
@@ -75,8 +75,8 @@ const OnRentDetailsView = ({ onRent, onClose }) => {
 
         {/* Vehicle Details */}
         <div className="col-12 col-md-6">
-          <div className="card shadow-sm mb-3">
-            <div className="card-body">
+          <div className="card shadow-lg mb-2">
+            <div className="card-body" style={{ minHeight: "180px" }}>
               <h5 className="card-title text-primary">Vehicle Details</h5>
               <div className="row">
                 {[
@@ -89,11 +89,11 @@ const OnRentDetailsView = ({ onRent, onClose }) => {
                     <div className="d-flex flex-wrap">
                       <div
                         className="fw-semibold me-1"
-                        style={{ minWidth: "120px" }}
+                        style={{ minWidth: "105px" }}
                       >
                         {label}
                       </div>
-                      <div style={{ minWidth: "10px" }}>
+                      <div style={{ minWidth: "1px" }}>
                         <strong>:</strong>
                       </div>
                       <div className="ms-2">{value}</div>
@@ -106,14 +106,14 @@ const OnRentDetailsView = ({ onRent, onClose }) => {
         </div>
       </div>
 
-      <div className="card mt-4 shadow-sm">
+      <div className="card mt-2 shadow-lg">
         <div className="card-header bg-primary text-white">
           <h5 className="mb-0">Items on Rent</h5>
         </div>
         <div>
           {" "}
           <div className="table-responsive">
-            <table className="table table-sm table-hover text-center">
+            <table className="table table-sm table-hover text-center text-sm">
               <thead className="table-light">
                 <tr>
                   <th>#</th>

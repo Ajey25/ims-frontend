@@ -338,7 +338,7 @@ const OnRent = () => {
             <table className="table table-sm table-bordered shadow-sm text-center">
               <thead className="table-light">
                 <tr>
-                  <th>#</th>
+                  <th>Sr No.</th>
                   <th>On Rent No.</th>
                   <th>On Rent Date</th>
                   <th>Customer Name</th>

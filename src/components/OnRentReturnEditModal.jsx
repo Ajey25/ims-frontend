@@ -5,7 +5,8 @@ import { Dropdown, Form, Button } from "react-bootstrap";
 import { FaTimes } from "react-icons/fa";
 import axios from "axios";
 import Select from "react-select";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
   // Basic form states
   const [onRentReturnNo, setOnRentReturnNo] = useState("");
@@ -38,6 +39,45 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
   // Search states
   const [itemSearchTerm, setItemSearchTerm] = useState("");
   const [onRentSearchTerm, setOnRentSearchTerm] = useState("");
+  const handleDateChange = (date) => {
+    setOnRentReturnDate(date);
+  };
+  const handleDateChangeRaw = (e) => {
+    const value = e.target.value;
+
+    // Regex to validate both dd/MM/yyyy and ddMMyyyy formats
+    const regexWithSlashes = /^(\d{2})\/(\d{2})\/(\d{4})$/; // dd/MM/yyyy format
+    const regexWithoutSlashes = /^(\d{2})(\d{2})(\d{4})$/; // ddMMyyyy format
+
+    let date = null;
+
+    // Check if the input is in the dd/MM/yyyy format
+    if (regexWithSlashes.test(value)) {
+      const [day, month, year] = value.split("/");
+      date = new Date(`${year}-${month}-${day}`);
+    }
+    // Check if the input is in the ddMMyyyy format
+    else if (regexWithoutSlashes.test(value)) {
+      const [day, month, year] = [
+        value.slice(0, 2),
+        value.slice(2, 4),
+        value.slice(4),
+      ];
+      date = new Date(`${year}-${month}-${day}`);
+    }
+
+    // If the date is valid, update the state
+    if (date && !isNaN(date.getTime())) {
+      setOnRentReturnDate(date);
+      setErrors((prevErrors) => ({ ...prevErrors, onRentReturnDate: "" })); // Clear any previous error
+    } else {
+      setOnRentReturnDate(null); // Reset date if invalid
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        onRentReturnDate: "",
+      }));
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -520,11 +560,57 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
       </Form.Select>
     );
   };
+  const validateLength = (value, fieldName) => {
+    if (value.trim().length < 4) {
+      return `${fieldName} must be at least 4 characters long.`;
+    }
+    if (value.trim().length > 20) {
+      return `${fieldName} must be less than 20 characters long.`;
+    }
+    return null;
+  };
 
   const validate = () => {
     let tempErrors = {};
+    const vehicleErrors = {};
 
-    if (!onRentReturnDate.trim()) {
+    // Only validate vehicle details if they are provided
+    if (vehicleDetails.vehicleName) {
+      const vehicleNameError = validateLength(
+        vehicleDetails.vehicleName,
+        "Vehicle Name"
+      );
+      if (vehicleNameError) vehicleErrors.vehicleName = vehicleNameError;
+    }
+
+    if (vehicleDetails.vehicleNo) {
+      const vehicleNoError = validateLength(
+        vehicleDetails.vehicleNo,
+        "Vehicle Number"
+      );
+      if (vehicleNoError) vehicleErrors.vehicleNo = vehicleNoError;
+    }
+
+    if (vehicleDetails.driverName) {
+      const driverNameError = validateLength(
+        vehicleDetails.driverName,
+        "Driver Name"
+      );
+      if (driverNameError) vehicleErrors.driverName = driverNameError;
+    }
+
+    // Mobile number validation, if it's provided
+    if (vehicleDetails.mobileNo) {
+      if (!/^[6-9]\d{9}$/.test(vehicleDetails.mobileNo.trim())) {
+        vehicleErrors.mobileNo = "Enter a valid 10-digit mobile number.";
+      }
+    }
+
+    // If there are any vehicle errors, add them to the main errors object
+    if (Object.keys(vehicleErrors).length > 0) {
+      tempErrors.vehicleDetails = vehicleErrors;
+    }
+    if (!onRentReturnDate) {
       tempErrors.onRentReturnDate = "Return Date is required.";
     } else {
       const selectedOnRentDates = selectedItems
@@ -553,8 +639,9 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
       tempErrors.customerName = "Customer Name is required.";
     }
     if (!totalAmount) {
-      tempErrors.totalAmount = "total amount must be greater than 0.";
+      tempErrors.totalAmount = "Total amount must be greater than 0.";
     }
+
     // Filter items based on selected OnRent refs
     const itemsToValidate = selectedItems.filter((item) =>
       selectedOnRentRefs.includes(item.onRentId)
@@ -577,15 +664,11 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
 
         if (!rentedItem) return;
 
-        // Correct calculation for validation
-        let originalQty, dynamicRemainingQty;
-
+        let originalQty;
         if (orr) {
-          // In edit mode
           const previouslyReturnedQty = rentedItem?.qtyReturn || 0;
           originalQty = (rentedItem?.remainingQty || 0) + previouslyReturnedQty;
         } else {
-          // In add mode
           originalQty = rentedItem?.qtyOrWeight || 0;
         }
 
@@ -606,6 +689,7 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0; // Return true if no errors
   };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     setSaveClick(true);
@@ -669,24 +753,18 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
           <div className="col-md-6">
             {/* Return Date */}
             <div>
-              {" "}
               <label className="form-label">Return Date</label>
-              <input
-                type="date"
-                className="form-control"
-                value={onRentReturnDate}
-                onFocus={(e) => e.target.showPicker()}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setOnRentReturnDate(value);
-
-                  // Clear error when user changes the date
-                  setErrors((prev) => ({ ...prev, onRentReturnDate: "" }));
-
-                  // Clear selections when date changes
+              <DatePicker
+                selected={onRentReturnDate}
+                onChange={(date) => {
+                  handleDateChange(date);
                   setSelectedItems([]);
                   setSelectedOnRentRefs([]);
                 }}
+                onChangeRaw={handleDateChangeRaw}
+                dateFormat="dd/MM/yyyy"
+                placeholderText="dd/MM/yyyy"
+                className="form-control"
               />
               {errors.onRentReturnDate && (
                 <small className="text-danger">{errors.onRentReturnDate}</small>
@@ -694,7 +772,7 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
             </div>
 
             {/* Customer Name */}
-            <label className="form-label mt-5">
+            <label className="form-label mt-1">
               Customer Name <span className="text-danger">*</span>
             </label>
             <Select
@@ -715,9 +793,9 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
             {errors.customerName && (
               <small className="text-danger">{errors.customerName}</small>
             )}
-
             {/* Total Amount */}
-            <label className="form-label mt-5">Total Amount</label>
+            <br />
+            <label className="form-label mt-1">Total Amount</label>
             <input
               type="number"
               className="form-control"
@@ -731,6 +809,7 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
 
           {/* Vehicle Details */}
           <div className="col-md-6">
+            {/* Vehicle Name */}
             <label className="form-label">Vehicle Name</label>
             <input
               type="text"
@@ -740,8 +819,15 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
                 handleVehicleDetailsChange("vehicleName", e.target.value)
               }
             />
+            {errors.vehicleDetails?.vehicleName && (
+              <small className="text-danger">
+                {errors.vehicleDetails.vehicleName}
+              </small>
+            )}
 
-            <label className="form-label mt-3">Vehicle No</label>
+            {/* Vehicle No */}
+            <br />
+            <label className="form-label mt-1">Vehicle No</label>
             <input
               type="text"
               className="form-control"
@@ -750,8 +836,15 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
                 handleVehicleDetailsChange("vehicleNo", e.target.value)
               }
             />
+            {errors.vehicleDetails?.vehicleNo && (
+              <small className="text-danger">
+                {errors.vehicleDetails.vehicleNo}
+              </small>
+            )}
 
-            <label className="form-label mt-3">Driver Name</label>
+            {/* Driver Name */}
+            <br />
+            <label className="form-label mt-1">Driver Name</label>
             <input
               type="text"
               className="form-control"
@@ -760,8 +853,15 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
                 handleVehicleDetailsChange("driverName", e.target.value)
               }
             />
+            {errors.vehicleDetails?.driverName && (
+              <small className="text-danger">
+                {errors.vehicleDetails.driverName}
+              </small>
+            )}
 
-            <label className="form-label mt-3">Driver Mobile No</label>
+            {/* Driver Mobile No */}
+            <br />
+            <label className="form-label mt-1">Driver Mobile No</label>
             <input
               type="text"
               className="form-control"
@@ -770,6 +870,11 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
                 handleVehicleDetailsChange("mobileNo", e.target.value)
               }
             />
+            {errors.vehicleDetails?.mobileNo && (
+              <small className="text-danger">
+                {errors.vehicleDetails.mobileNo}
+              </small>
+            )}
           </div>
         </div>
 

@@ -30,12 +30,38 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
   };
   const handleDateChangeRaw = (e) => {
     const value = e.target.value;
-    if (/^\d{8}$/.test(value)) {
-      const day = value.slice(0, 2);
-      const month = value.slice(2, 4);
-      const year = value.slice(4);
-      const date = new Date(`${year}-${month}-${day}`);
+
+    // Regex to validate both dd/MM/yyyy and ddMMyyyy formats
+    const regexWithSlashes = /^(\d{2})\/(\d{2})\/(\d{4})$/; // dd/MM/yyyy format
+    const regexWithoutSlashes = /^(\d{2})(\d{2})(\d{4})$/; // ddMMyyyy format
+
+    let date = null;
+
+    // Check if the input is in the dd/MM/yyyy format
+    if (regexWithSlashes.test(value)) {
+      const [day, month, year] = value.split("/");
+      date = new Date(`${year}-${month}-${day}`);
+    }
+    // Check if the input is in the ddMMyyyy format
+    else if (regexWithoutSlashes.test(value)) {
+      const [day, month, year] = [
+        value.slice(0, 2),
+        value.slice(2, 4),
+        value.slice(4),
+      ];
+      date = new Date(`${year}-${month}-${day}`);
+    }
+
+    // If the date is valid, update the state
+    if (date && !isNaN(date.getTime())) {
       setInwardDate(date);
+      setErrors((prevErrors) => ({ ...prevErrors, inwardDate: "" })); // Clear any previous error
+    } else {
+      setInwardDate(null); // Reset date if invalid
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        inwardDate: "",
+      }));
     }
   };
   useEffect(() => {

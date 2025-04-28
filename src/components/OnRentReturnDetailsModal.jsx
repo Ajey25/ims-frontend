@@ -43,9 +43,9 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-2">
       {/* Header */}
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className="d-flex justify-content-between align-items-center mb-2">
         <h3 className="fw-bold">Return Details</h3>
         <button className="btn btn-secondary" onClick={onClose}>
           Back
@@ -56,8 +56,8 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
       <div className="row">
         {/* Return Details */}
         <div className="col-12 col-md-6">
-          <div className="card shadow-sm mb-3">
-            <div className="card-body">
+          <div className="card shadow-lg mb-3" style={{ minWidth: "300px" }}>
+            <div className="card-body" style={{ minHeight: "195px" }}>
               <h5 className="card-title text-primary">Return Details</h5>
               <div className="row">
                 {[
@@ -73,7 +73,7 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
                     value: orr.customers?.customerName || "N/A",
                   },
                   {
-                    label: "Payment Status",
+                    label: "Status",
                     value: (
                       <span
                         className={`badge ${
@@ -92,12 +92,12 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
                       <div
                         className="fw-semibold"
                         style={{
-                          minWidth: "130px",
+                          minWidth: "100px",
                         }}
                       >
                         {label}
                       </div>
-                      <div style={{ minWidth: "10px" }}>
+                      <div style={{ minWidth: "5px" }}>
                         <strong>:</strong>
                       </div>
                       <div className="ms-2">{value}</div>
@@ -111,8 +111,8 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
 
         {/* Vehicle Details */}
         <div className="col-12 col-md-6">
-          <div className="card shadow-sm mb-3">
-            <div className="card-body">
+          <div className="card shadow-lg mb-2" style={{ minWidth: "300px" }}>
+            <div className="card-body" style={{ minHeight: "195px" }}>
               <h5 className="card-title text-primary">Vehicle Details</h5>
               <div className="row">
                 {[
@@ -126,12 +126,12 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
                       <div
                         className="fw-semibold"
                         style={{
-                          minWidth: "130px",
+                          minWidth: "110px",
                         }}
                       >
                         {label}
                       </div>
-                      <div style={{ minWidth: "10px" }}>
+                      <div style={{ minWidth: "5px" }}>
                         <strong>:</strong>
                       </div>
                       <div className="ms-2">{value}</div>
@@ -145,10 +145,10 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
       </div>
 
       {/* Payment Summary */}
-      <div className="row">
+      <div className="row ">
         <div className="col-md-4">
           <div className="card text-center shadow-sm bg-light">
-            <div className="card-body">
+            <div className="card-body shadow-lg">
               <h6 className="fw-bold">Total Amount</h6>
               <p className="h4 text-primary">
                 ₹{(orr.totalAmount || 0).toFixed(2)}
@@ -157,7 +157,7 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
           </div>
         </div>
         <div className="col-md-4">
-          <div className="card text-center shadow-sm bg-light">
+          <div className="card text-center shadow-lg bg-light">
             <div className="card-body">
               <h6 className="fw-bold">Paid Amount</h6>
               <p className="h4 text-success">
@@ -167,7 +167,7 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
           </div>
         </div>
         <div className="col-md-4">
-          <div className="card text-center shadow-sm bg-light">
+          <div className="card text-center shadow-lg bg-light">
             <div className="card-body">
               <h6 className="fw-bold">Balance Amount</h6>
               <p className="h4 text-danger">
@@ -179,13 +179,13 @@ const OnRentReturnDetailsModal = ({ orr, onClose }) => {
       </div>
 
       {/* Returned Items Table */}
-      <div className="card mt-4 shadow-sm">
+      <div className="card mt-3 shadow-lg">
         <div className="card-header bg-primary text-white">
           <h5 className="mb-0">Returned Items</h5>
         </div>
         <div className="card-body p-0">
           <div className="table-responsive">
-            <table className="table table-hover">
+            <table className="table table-hover table-sm text-center text-sm">
               <thead className="table-light">
                 <tr>
                   <th>On Rent No</th>

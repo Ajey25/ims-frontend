@@ -228,7 +228,7 @@ const OnRentReturn = () => {
             <table className="table table-sm table-bordered shadow-sm text-center">
               <thead className="table-light">
                 <tr>
-                  <th>#</th>
+                  <th>Sr No.</th>
                   <th>Return No.</th>
                   <th>Return Date</th>
                   <th>Customer Name</th>
