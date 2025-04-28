@@ -153,51 +153,88 @@ const Navbar = ({
                   {user?.firstName} {user?.lastName}
                 </div>
                 <div
-                  className="bg-light shadow-lg rounded w-100 p-2 border d-flex align-items-center justify-content-center mt-2"
+                  className="bg-light shadow-sm rounded w-100 p-2 border d-flex align-items-center justify-content-center mt-2"
                   style={{
                     cursor: "pointer",
+                    overflow: "hidden",
+                    position: "relative",
                   }}
                   onClick={toggleTheme}
                   title="Toggle Theme"
                 >
-                  <motion.div
-                    animate={{ scale: theme === "light" ? 1.2 : 1 }} // Scale animation when theme changes
-                    transition={{
-                      duration: 0.3,
-                      type: "spring",
-                      stiffness: 300,
+                  {/* Background effect */}
+                  <div
+                    className="position-absolute"
+                    style={{
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      backgroundColor:
+                        theme === "light"
+                          ? "rgba(255, 243, 205, 0.3)"
+                          : "rgba(108, 117, 125, 0.2)",
+                      transition: "all 0.4s ease",
                     }}
-                    className="d-flex align-items-center"
+                  />
+
+                  <motion.div
+                    initial={{ y: 0 }}
+                    animate={{
+                      y: [0, -5, 0],
+                      rotate: theme === "light" ? [0, 10, 0, -10, 0] : 0,
+                    }}
+                    transition={{
+                      duration: 0.6,
+                      repeat: 0,
+                      repeatType: "reverse",
+                    }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="d-flex align-items-center z-index-1 position-relative"
                   >
-                    {/* Bulb icon changes based on the theme */}
                     {theme === "light" ? (
                       <FaLightbulb
-                        className="text-warning" // Orange color for "light" theme
-                        size={24}
+                        className="text-warning"
+                        size={22}
+                        style={{
+                          filter: "drop-shadow(0 0 3px rgba(255, 193, 7, 0.5))",
+                        }}
                       />
                     ) : (
-                      <FaRegLightbulb
-                        className="text-muted" // Gray color for "dark" theme
-                        size={24}
-                      />
+                      <FaRegLightbulb className="text-secondary" size={22} />
                     )}
 
-                    <span className="fw-semibold ms-2">
-                      {theme === "light" ? "Turn Off Lights" : "Turn On Lights"}
+                    <span
+                      className="fw-semibold ms-2"
+                      style={{
+                        transition: "color 0.3s ease",
+                        color: theme === "light" ? "#6c757d" : "#6c757d",
+                      }}
+                    >
+                      Lights {theme === "light" ? "On" : "Off"}
                     </span>
                   </motion.div>
                 </div>
 
                 <div
-                  className="bg-light shadow-lg rounded w-100 p-2 border d-flex align-items-center justify-content-center"
+                  className="bg-light shadow-sm rounded w-100 p-2 border d-flex align-items-center justify-content-center mt-2"
                   style={{
                     cursor: "pointer",
+                    position: "relative",
+                    overflow: "hidden",
                   }}
                   onClick={handleLogout}
                   title="Logout"
                 >
-                  <FaPowerOff className="text-danger me-2" size={20} />
-                  <span className="text-danger fw-semibold">Logout</span>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="d-flex align-items-center"
+                  >
+                    <FaPowerOff className="text-danger me-2" size={20} />
+                    <span className="text-danger fw-semibold">Logout</span>
+                  </motion.div>
                 </div>
               </div>
             </div>
