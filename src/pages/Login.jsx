@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginImg from "../assets/login.jpg";
 import { toast } from "react-toastify";
-
+import Rocket from "../assets/rocket.gif";
+import Lottie from "lottie-react";
+import LoginAnimation from "../assets/loginani.json";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,10 +42,11 @@ const Login = () => {
       console.log("Logged in successfully");
       navigate("/app/masters/item-master");
       toast.success(
-        <span>
-          Welcome{" "}
+        <div className="d-flex align-items-center gap-2">
+          Welcome Back{" "}
           <strong className="text-dark ">{`${data.user.firstName} ${data.user.lastName}`}</strong>
-        </span>
+          <img style={{ height: "100%", width: "30px" }} src={Rocket} />
+        </div>
       );
     } catch (err) {
       setError(err.message);
@@ -58,12 +61,11 @@ const Login = () => {
         style={{ maxWidth: "900px" }}
       >
         {/* Left Side - Image (hidden on small screens) */}
-        <div className=" col-12 col-md-6  p-0">
-          <img
-            src={LoginImg}
-            alt="Login"
-            className="img-fluid mb-md-0 w-100 border-1 "
-            style={{ objectFit: "cover" }}
+        <div className="col-12 col-md-6 p-0">
+          <Lottie
+            animationData={LoginAnimation}
+            loop={true}
+            style={{ width: "100%", height: "auto" }}
           />
         </div>
 

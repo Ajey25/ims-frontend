@@ -48,7 +48,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
       <div className="flex-grow-1 overflow-auto">
         <ul className="nav flex-column mt-3">
           {/* Masters */}
-          <li className="nav-item px-2">
+          <li className="nav-item ">
             <button
               className={`nav-link text-white d-flex align-items-center w-100 bg-transparent border-0 ${
                 isMasterOpen ? "is-open" : ""
