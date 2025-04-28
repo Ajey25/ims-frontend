@@ -42,10 +42,14 @@ const Login = () => {
       console.log("Logged in successfully");
       navigate("/app/masters/item-master");
       toast.success(
-        <div className="d-flex align-items-center gap-2">
-          Welcome Back{" "}
-          <strong className="text-dark ">{`${data.user.firstName} ${data.user.lastName}`}</strong>
-          <img style={{ height: "100%", width: "30px" }} src={Rocket} />
+        <div className="d-flex align-items-center" style={{ width: "300px" }}>
+          <span>Welcome Back</span>
+          <strong className="text-dark mx-2">{`${data.user.firstName} ${data.user.lastName}`}</strong>
+          <img
+            style={{ height: "35px", width: "40px", objectFit: "contain" }}
+            src={Rocket}
+            alt="rocket"
+          />
         </div>
       );
     } catch (err) {
