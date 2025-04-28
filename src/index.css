@@ -217,7 +217,7 @@
 /* Target the toast container */
 .Toastify__toast-container--top-right {
   min-width: 300px; /* Set a fixed width for the toast container */
-  max-width: 400px !important; /* Use !important to override inline styles */
+  max-width: 380px !important; /* Use !important to override inline styles */
 }
 
 /* Optionally, you can also target the individual toasts */
