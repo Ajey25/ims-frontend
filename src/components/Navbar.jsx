@@ -229,7 +229,7 @@ const Navbar = ({
 
                 {/* Theme Toggle */}
                 <div
-                  className="bg-light d-none shadow-sm rounded w-100 p-2 border d-flex align-items-center justify-content-center mt-2"
+                  className="bg-light d-block d-sm-none shadow-sm rounded w-100 p-2 border d-flex align-items-center justify-content-center mt-2"
                   style={{
                     cursor: "pointer",
                     overflow: "hidden",
