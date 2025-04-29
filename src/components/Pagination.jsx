@@ -36,7 +36,7 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage }) => {
 
   return (
     <nav className="d-flex justify-content-end">
-      <ul className="pagination pagination-sm">
+      <ul className="pagination pagination-sm shadow-lg">
         {/* Previous */}
         <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
           <button

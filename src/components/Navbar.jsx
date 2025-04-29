@@ -4,6 +4,7 @@ import { FaBars, FaPowerOff, FaRegClock } from "react-icons/fa";
 import { FaRegLightbulb, FaLightbulb } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useSession } from "./SessionProvider";
+import { getSessionTimeRemaining } from "../utils/localStorageUtils";
 
 const Navbar = ({
   isSidebarOpen,
@@ -17,6 +18,18 @@ const Navbar = ({
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const [pageTitle, setPageTitle] = useState("");
+  const [timeLeft, setTimeLeft] = useState(getSessionTimeRemaining());
+  const formatTime = (milliseconds) => {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+    const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
+      2,
+      "0"
+    );
+    const seconds = String(totalSeconds % 60).padStart(2, "0");
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
   const user = JSON.parse(
     localStorage.getItem("user") || '{"firstName":"", "lastName":""}'
   );
@@ -132,7 +145,7 @@ const Navbar = ({
           {showDropdown && (
             <div
               className="position-absolute d-flex flex-column align-items-center shadow-lg"
-              style={{ top: "50px", right: "-20px", width: "250px" }}
+              style={{ top: "50px", right: "-20px", width: "200px" }}
             >
               <div
                 className="text-black shadow-lg rounded p-3 d-flex flex-column align-items-center position-relative animate-dropdown"
@@ -146,7 +159,7 @@ const Navbar = ({
                   style={{
                     position: "absolute",
                     top: "-10px",
-                    left: "80%",
+                    left: "75%",
                     transform: "translateX(-0%)",
                     width: 0,
                     height: 0,
@@ -158,6 +171,18 @@ const Navbar = ({
 
                 <div className="mb-3 text-center fw-semibold">
                   {user?.firstName} {user?.lastName}
+                </div>
+                <div>
+                  <FaRegClock
+                    className="text-primary"
+                    size={18}
+                    style={{
+                      marginRight: "8px",
+                    }}
+                  />{" "}
+                  <small className="text-muted">
+                    {formatTime(timeLeft)} remaining
+                  </small>
                 </div>
 
                 {/* Refresh Session Button - New Addition */}

@@ -208,7 +208,7 @@ const ItemMaster = () => {
         </button>
       </div>
 
-      <div className="d-flex justify-content-end mb-3 ">
+      <div className="d-flex justify-content-end mb-3  ">
         <input
           type="text"
           className="form-control shadow-sm"
@@ -219,8 +219,8 @@ const ItemMaster = () => {
         />
       </div>
 
-      <div className="table-responsive" style={{ minHeight: "395px" }}>
-        <table className="table table-sm table-bordered  text-center shadow-sm">
+      <div className="table-responsive " style={{ minHeight: "395px" }}>
+        <table className="table table-sm  table-bordered  text-center shadow-sm">
           <thead className="table-light">
             <tr>
               <th>Sr No.</th>

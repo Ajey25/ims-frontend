@@ -148,8 +148,7 @@
 
 @media (max-width: 768px) {
   .responsive-container {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
+    padding: 0rem !important;
   }
 }
 
