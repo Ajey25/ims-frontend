@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import {
+  getAdminLoginStatus,
+  SESSION_DURATION,
+} from "../utils/localStorageUtils";
 
 const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -10,6 +14,24 @@ const Layout = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const location = useLocation();
   const [theme, setTheme] = useState("light"); // default
+  const navigate = useNavigate();
+  useEffect(() => {
+    // Check session validity on mount
+    if (!getAdminLoginStatus()) {
+      localStorage.clear();
+      navigate("/");
+    }
+
+    // Set a timer to log out after 1 minute (60 seconds)
+    const timeoutId = setTimeout(() => {
+      clearAdminLoginStatus();
+      navigate("/", { replace: true });
+      toast.error("Session expired. Please log in again.");
+    }, SESSION_DURATION); // 1 minute timeout
+
+    // Clean up the timeout when the component is unmounted or session is valid
+    return () => clearTimeout(timeoutId);
+  }, [navigate]);
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
     setIsDimmed((prev) => !prev);

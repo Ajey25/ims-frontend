@@ -1,14 +1,15 @@
-import { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import { getAdminLoginStatus } from "./utils/localStorageUtils";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
+import { SessionProvider } from "./components/SessionProvider";
 import ItemMaster from "./pages/Masters/ItemMaster";
 import CustomerMaster from "./pages/Masters/CustomerMaster";
 import StockMaster from "./pages/Masters/StockMaster";
@@ -19,22 +20,20 @@ import Payment from "./pages/Transactions/Payment";
 import OnRent from "./pages/Transactions/OnRent";
 import CustomerReports from "./pages/Reports/CustomerReports";
 
+// ProtectedRoute component that checks if user is authenticated
 const ProtectedRoute = ({ children }) => {
-  const isLoggedIn = getAdminLoginStatus();
-  return isLoggedIn ? children : <Navigate to="/" replace />;
+  return <SessionProvider>{children}</SessionProvider>;
 };
 
 const App = () => {
-  const [isLoggedIn] = useState(getAdminLoginStatus());
-
   return (
     <>
       <Router>
         <Routes>
-          {/* Root route always goes to login */}
+          {/* Login route */}
           <Route path="/" element={<Login />} />
 
-          {/* Protected routes */}
+          {/* Protected Routes */}
           <Route
             path="/app"
             element={
@@ -43,7 +42,7 @@ const App = () => {
               </ProtectedRoute>
             }
           >
-            {/* Default route to item-master */}
+            {/* Default route inside /app */}
             <Route
               index
               element={<Navigate to="masters/item-master" replace />}
@@ -66,16 +65,19 @@ const App = () => {
               element={<OnRentReturn />}
             />
             <Route path="transactions/payment" element={<Payment />} />
+
+            {/* Reports route */}
             <Route
               path="reports/customerreports"
               element={<CustomerReports />}
             />
           </Route>
 
-          {/* Catch-all route */}
+          {/* Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
+
       <ToastContainer
         position="top-right"
         autoClose={4000}

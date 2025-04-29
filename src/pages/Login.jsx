@@ -1,16 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import LoginImg from "../assets/login.jpg";
 import { toast } from "react-toastify";
 import Rocket from "../assets/rocket.gif";
 import Lottie from "lottie-react";
 import LoginAnimation from "../assets/loginani.json";
+import { getAdminLoginStatus } from "../utils/localStorageUtils";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Check if already logged in
+  useEffect(() => {
+    if (getAdminLoginStatus()) {
+      navigate("/app/masters/item-master", { replace: true });
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -35,9 +43,12 @@ const Login = () => {
         throw new Error(data.message || "Login failed. Please try again.");
       }
 
-      // Store token in localStorage
+      // Store user data and set login time
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("loginTime", Date.now().toString());
+      localStorage.setItem("adminLoggedIn", "true");
+
       // Redirect to Item Master page
       console.log("Logged in successfully");
       navigate("/app/masters/item-master");
@@ -57,6 +68,7 @@ const Login = () => {
       );
     } catch (err) {
       setError(err.message);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -67,7 +79,7 @@ const Login = () => {
         className="row w-100 shadow-lg rounded-5 shadow-info overflow-hidden"
         style={{ maxWidth: "900px" }}
       >
-        {/* Left Side - Image (hidden on small screens) */}
+        {/* Left Side - Animation */}
         <div className="col-12 col-md-6 p-0">
           <Lottie
             animationData={LoginAnimation}

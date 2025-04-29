@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { clearAdminLoginStatus } from "../utils/localStorageUtils";
-import { FaBars, FaPowerOff } from "react-icons/fa";
-import { FaRegLightbulb, FaLightbulb } from "react-icons/fa"; // Importing icons from React Icons
-import { motion } from "framer-motion"; // If you want to animate it
+import { FaBars, FaPowerOff, FaRegClock } from "react-icons/fa";
+import { FaRegLightbulb, FaLightbulb } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { useSession } from "./SessionProvider";
 
 const Navbar = ({
   isSidebarOpen,
@@ -17,7 +17,12 @@ const Navbar = ({
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const [pageTitle, setPageTitle] = useState("");
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(
+    localStorage.getItem("user") || '{"firstName":"", "lastName":""}'
+  );
+
+  // Get session functions from our SessionProvider
+  const { logout, refreshSession } = useSession();
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -69,13 +74,15 @@ const Navbar = ({
     setPageTitle(getPageTitle());
   }, [location.pathname]);
 
-  // Logout function
+  // Logout function - now using the session provider
   const handleLogout = () => {
-    // Clear login status in localStorage
-    clearAdminLoginStatus();
+    logout();
+  };
 
-    // Redirect to login page
-    navigate("/");
+  // Refresh session function - using the session provider
+  const handleRefreshSession = () => {
+    refreshSession();
+    setShowDropdown(false);
   };
 
   return (
@@ -116,23 +123,23 @@ const Navbar = ({
             title="User Menu"
           >
             <strong>
-              {user?.firstName?.charAt(0).toUpperCase()}
-              {user?.lastName?.charAt(0).toUpperCase()}
+              {user?.firstName?.charAt(0).toUpperCase() || ""}
+              {user?.lastName?.charAt(0).toUpperCase() || ""}
             </strong>
           </div>
 
           {/* Dropdown Menu */}
           {showDropdown && (
             <div
-              className="position-absolute d-flex flex-column align-items-center shadow-lg  "
+              className="position-absolute d-flex flex-column align-items-center shadow-lg"
               style={{ top: "50px", right: "-20px", width: "250px" }}
             >
               <div
-                className="text-black  shadow-lg rounded p-3 d-flex flex-column align-items-center position-relative animate-dropdown"
+                className="text-black shadow-lg rounded p-3 d-flex flex-column align-items-center position-relative animate-dropdown"
                 style={{
                   width: "100%",
                   border: "1px solid #ccc",
-                  backgroundColor: "#fff", // <-- darker than bg-light
+                  backgroundColor: "#fff",
                 }}
               >
                 <div
@@ -152,8 +159,52 @@ const Navbar = ({
                 <div className="mb-3 text-center fw-semibold">
                   {user?.firstName} {user?.lastName}
                 </div>
+
+                {/* Refresh Session Button - New Addition */}
                 <div
-                  className="bg-light shadow-sm rounded w-100 p-2 border d-flex align-items-center justify-content-center mt-2"
+                  className="bg-light d-none shadow-sm rounded w-100 p-2 border d-flex align-items-center justify-content-center mt-2"
+                  style={{
+                    cursor: "pointer",
+                    overflow: "hidden",
+                    position: "relative",
+                  }}
+                  onClick={handleRefreshSession}
+                  title="Refresh Session"
+                >
+                  {/* Background effect */}
+                  <div
+                    className="position-absolute"
+                    style={{
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      backgroundColor: "rgba(108, 177, 255, 0.2)",
+                      transition: "all 0.4s ease",
+                    }}
+                  />
+
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="d-flex align-items-center z-index-1 position-relative"
+                  >
+                    <FaRegClock
+                      className="text-primary"
+                      size={18}
+                      style={{
+                        marginRight: "8px",
+                      }}
+                    />
+                    <span className="fw-semibold text-primary">
+                      Refresh Session
+                    </span>
+                  </motion.div>
+                </div>
+
+                {/* Theme Toggle */}
+                <div
+                  className="bg-light d-none shadow-sm rounded w-100 p-2 border d-flex align-items-center justify-content-center mt-2"
                   style={{
                     cursor: "pointer",
                     overflow: "hidden",
@@ -217,8 +268,9 @@ const Navbar = ({
                   </motion.div>
                 </div>
 
+                {/* Logout Button */}
                 <div
-                  className="bg-light shadow-sm rounded w-100 p-2 border d-flex align-items-center justify-content-center mt-2"
+                  className="bg-light shadow-lg border-danger rounded w-100 p-2 border d-flex align-items-center justify-content-center mt-2"
                   style={{
                     cursor: "pointer",
                     position: "relative",
@@ -266,6 +318,13 @@ const Navbar = ({
           .table-responsive {
             scrollbar-width: thin;
             scrollbar-color: rgba(0,0,0,0.2) transparent;
+          }
+          .animate-dropdown {
+            animation: fadeIn 0.2s ease-in-out;
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
           }
         `}
       </style>
