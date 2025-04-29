@@ -296,7 +296,7 @@ const OnRent = () => {
     .slice(startIndex, endIndex);
 
   return (
-    <div className="container ">
+    <div className="container px-0 ">
       {showEditForm ? (
         <OnRentEditModal
           onRent={selectedOnRent}
