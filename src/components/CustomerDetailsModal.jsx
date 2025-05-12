@@ -98,48 +98,55 @@ const CustomerDetailsModal = ({ customer, onClose }) => {
       </div>
 
       {/* Customer Credits Table */}
-      <div className="card mt-3 ">
+      <div className="card mt-3">
         <div className="card-body">
-          <h4 className="mb-2">Customer Credits</h4>
+          <h4 className="mb-3">Customer Credits</h4>
+
           {loading ? (
             <p>Loading credits...</p>
           ) : (
-            <table className="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Sr.No</th>
-                  <th>Payment Date</th>
-                  <th>Payment Type</th>
-                  <th>Amount</th>
-                  <th>Created By</th>
-                  <th>Created At</th>
-                </tr>
-              </thead>
-              <tbody>
-                {getPaginatedCredits().length > 0 ? (
-                  getPaginatedCredits().map((credit, index) => (
-                    <tr key={credit.id}>
-                      <td>{(currentPage - 1) * pageSize + index + 1}</td>
-                      <td>
-                        {new Date(credit.paymentDate).toLocaleDateString(
-                          "en-GB"
-                        )}
-                      </td>
-                      <td>{credit.paymentType}</td>
-                      <td>{credit.amount}</td>
-                      <td>{credit.createdBy}</td>
-                      <td>
-                        {new Date(credit.createdAt).toLocaleDateString("en-GB")}
+            <div className="table-responsive">
+              <table className="table table-bordered table-striped mb-0">
+                <thead className="table-light">
+                  <tr>
+                    <th>Sr.No</th>
+                    <th>Payment Date</th>
+                    <th>Payment Type</th>
+                    <th>Amount</th>
+                    <th>Created By</th>
+                    <th>Created At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {getPaginatedCredits().length > 0 ? (
+                    getPaginatedCredits().map((credit, index) => (
+                      <tr key={credit.id}>
+                        <td>{(currentPage - 1) * pageSize + index + 1}</td>
+                        <td>
+                          {new Date(credit.paymentDate).toLocaleDateString(
+                            "en-GB"
+                          )}
+                        </td>
+                        <td>{credit.paymentType}</td>
+                        <td>{credit.amount}</td>
+                        <td>{credit.createdBy}</td>
+                        <td>
+                          {new Date(credit.createdAt).toLocaleDateString(
+                            "en-GB"
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="6" className="text-center">
+                        No credits found for this customer.
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="6">No credits found for this customer.</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            </div>
           )}
 
           {/* Pagination Controls */}
