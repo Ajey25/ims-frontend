@@ -137,7 +137,7 @@ const Navbar = ({
             style={{
               width: "43px",
               height: "43px",
-              fontSize: "20px",
+              fontSize: "22.5px",
               cursor: "pointer",
             }}
             onClick={toggleDropdown}

@@ -2,21 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" href="./src/assets/logo.png" type="image/png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#06c1db" />
-
     <title>Rental Inventory Management System</title>
     <script>
       const originalTitle = "Rental Inventory Management System";
       let index = 0;
 
       function animateTitle() {
-        document.title = originalTitle.slice(0, index++);
-        if (index > originalTitle.length) index = 0;
+        if (index <= originalTitle.length) {
+          document.title = originalTitle.slice(0, index++);
+        } else {
+          index = originalTitle.length; // Keep the title as it is
+        }
       }
 
-      setInterval(animateTitle, 200); // Change speed here
+      setInterval(animateTitle, 50); // Change speed here
     </script>
   </head>
   <body>

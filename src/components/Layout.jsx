@@ -7,14 +7,17 @@ import {
   getAdminLoginStatus,
   SESSION_DURATION,
 } from "../utils/localStorageUtils";
+import { toast } from "react-toastify"; // Import toast from react-toastify
 
 const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isDimmed, setIsDimmed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [theme, setTheme] = useState("light");
+  const [isOnline, setIsOnline] = useState(navigator.onLine); // Track network status
   const location = useLocation();
-  const [theme, setTheme] = useState("light"); // default
   const navigate = useNavigate();
+
   useEffect(() => {
     // Check session validity on mount
     if (!getAdminLoginStatus()) {
@@ -27,11 +30,36 @@ const Layout = () => {
       clearAdminLoginStatus();
       navigate("/", { replace: true });
       toast.error("Session expired. Please log in again.");
-    }, SESSION_DURATION); // 1 minute timeout
+    }, SESSION_DURATION);
 
     // Clean up the timeout when the component is unmounted or session is valid
     return () => clearTimeout(timeoutId);
   }, [navigate]);
+
+  useEffect(() => {
+    // Listen to online/offline events
+    const handleOnline = () => {
+      setIsOnline(true);
+      toast.dismiss(); // Dismiss the "Disconnected" message when back online
+      toast.success("You are back online!"); // Show the online message
+    };
+
+    const handleOffline = () => {
+      setIsOnline(false);
+      toast.error("Oops! You’re offline. Check your connection!"); // Show the disconnected message
+    };
+
+    // Add event listeners for online/offline
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    // Cleanup event listeners
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
     setIsDimmed((prev) => !prev);
