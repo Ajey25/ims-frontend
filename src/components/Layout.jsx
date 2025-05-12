@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "./Navbar";
@@ -59,6 +59,19 @@ const Layout = () => {
       window.removeEventListener("offline", handleOffline);
     };
   }, []);
+  const prevPathRef = useRef(location.pathname);
+
+  useEffect(() => {
+    const prevPath = prevPathRef.current;
+    const newPath = location.pathname;
+
+    if (!isOnline && newPath !== prevPath) {
+      // If offline and route changes -> force reload to new path
+      window.location.href = newPath;
+    }
+
+    prevPathRef.current = newPath;
+  }, [location.pathname, isOnline]);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
