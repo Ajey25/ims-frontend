@@ -4,7 +4,7 @@ import Pagination from "../../components/Pagination"; // update path if needed
 
 const SELECT_ALL_OPTION = { value: "*", label: "Select All" };
 
-const ItemMaster = () => {
+const StockMaster = () => {
   const [items, setItems] = useState([]);
   const [options, setOptions] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState([]);
@@ -30,19 +30,39 @@ const ItemMaster = () => {
       const itemRes = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}/itemMaster`
       );
+      const onrentRes = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/onrent`
+      );
 
-      if (!stockRes.ok || !itemRes.ok) throw new Error("Fetch failed");
+      if (!stockRes.ok || !itemRes.ok || !onrentRes.ok)
+        throw new Error("Fetch failed");
 
       const stockData = await stockRes.json();
       const itemData = await itemRes.json();
+      const onrentData = await onrentRes.json();
 
+      // Merging stock data, item data, and onrent data
       const merged = stockData.map((stockItem) => {
-        const matched = itemData.find((i) => i.id === stockItem.item_id);
+        const matchedItem = itemData.find((i) => i.id === stockItem.item_id);
+
+        // Find the relevant on-rent records for the current stock item
+        const matchedOnRentItems = onrentData
+          .map((r) => r.items)
+          .flat()
+          .filter((item) => item.itemId === stockItem.item_id);
+
+        // Calculate total rent quantity for the item from all onrent records
+        const rentQty = matchedOnRentItems.reduce(
+          (acc, item) => acc + (item.qtyOrWeight || 0),
+          0
+        );
+
         return {
           ...stockItem,
-          itemName: matched?.itemName || "Unknown Item",
-          itemCode: matched?.itemCode || "Unknown Code",
-          description: matched?.description || "No description",
+          itemName: matchedItem?.itemName || "Unknown Item",
+          itemCode: matchedItem?.itemCode || "Unknown Code",
+          description: matchedItem?.description || "No description",
+          rentQty, // sum of rented quantities for the item
         };
       });
 
@@ -141,7 +161,6 @@ const ItemMaster = () => {
       </span>
     );
   };
-
   const sortedItems = [...filteredItems].sort((a, b) => {
     if (!sortConfig.key) return 0;
 
@@ -212,7 +231,7 @@ const ItemMaster = () => {
                         gap: "4px",
                       }}
                     >
-                      Quantity
+                      Available Qty
                       {getSortIndicator("qty")}
                     </span>
                   </th>
@@ -231,6 +250,21 @@ const ItemMaster = () => {
                       {getSortIndicator("weight")}
                     </span>
                   </th>
+                  <th
+                    onClick={() => requestSort("rentQty")}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "4px",
+                      }}
+                    >
+                      Rent Qty
+                      {getSortIndicator("rentQty")}
+                    </span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -243,11 +277,12 @@ const ItemMaster = () => {
                       <td>{item.description}</td>
                       <td>{item.qty}</td>
                       <td>{item.weight}</td>
+                      <td>{item.rentQty}</td> {/* Display rentQty here */}
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6" className="text-center">
+                    <td colSpan="7" className="text-center">
                       No records found
                     </td>
                   </tr>
@@ -270,4 +305,4 @@ const ItemMaster = () => {
   );
 };
 
-export default ItemMaster;
+export default StockMaster;

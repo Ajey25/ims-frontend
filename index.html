@@ -6,7 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#06c1db" />
 
-    <title>Vite + React</title>
+    <title>Rental Inventory Management System</title>
+    <script>
+      const originalTitle = "Rental Inventory Management System";
+      let index = 0;
+
+      function animateTitle() {
+        document.title = originalTitle.slice(0, index++);
+        if (index > originalTitle.length) index = 0;
+      }
+
+      setInterval(animateTitle, 200); // Change speed here
+    </script>
   </head>
   <body>
     <div id="root"></div>

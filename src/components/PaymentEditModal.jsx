@@ -19,6 +19,7 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedReturnNos, setSelectedReturnNos] = useState([]);
   const [paymentType, setPaymentType] = useState("");
+  const [creditBalance, setCreditBalance] = useState(0);
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -76,20 +77,21 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
     let tempErrors = {};
 
     // Customer Name validation
-    if (!customerName.trim())
+    if (!customerName || customerName.trim() === "")
       tempErrors.customerName = "Customer Name is required.";
 
     // Paid Amount validation
-    if (!paidAmount.trim()) tempErrors.paidAmount = "Enter an amount.";
-    if (parseFloat(paidAmount) <= 0)
+    if (paidAmount === "" || paidAmount === null || isNaN(paidAmount)) {
+      tempErrors.paidAmount = "Enter an amount.";
+    } else if (parseFloat(paidAmount) <= 0) {
       tempErrors.paidAmount = "Amount must be greater than 0.";
+    }
 
     const totalAllocated = returns.reduce(
       (sum, ret) => sum + (parseFloat(ret.paidAmount) || 0),
       0
     );
 
-    // Check if any return's paid amount exceeds its balance
     const hasExceededBalance = returns.some((ret) => {
       const balanceAmount = parseFloat(ret.balanceAmount || 0);
       const paidAmt = parseFloat(ret.paidAmount || 0);
@@ -101,11 +103,14 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
         "Paid amount cannot exceed balance amount for any return.";
     }
 
-    if (Math.abs(totalAllocated - parseFloat(paidAmount)) > 0.01) {
+    if (
+      paidAmount &&
+      !isNaN(paidAmount) &&
+      Math.abs(totalAllocated - parseFloat(paidAmount)) > 0.01
+    ) {
       tempErrors.allocation = "Total allocated amount must equal paid amount.";
     }
 
-    // Payment Type validation
     if (!paymentType) {
       tempErrors.paymentType = "Payment Type is required.";
     }
@@ -191,12 +196,21 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
     );
 
     // Set the selected customer details in state
-    setSelectedCustomer(selectedCustomer);
+    setSelectedCustomer(selectedCustomer || null);
     setCustomerId(selectedCustomerId);
-    setCustomerName(selectedCustomer ? selectedCustomer.customerName : "");
-    setCustomerEmail(selectedCustomer ? selectedCustomer.email : ""); // Add email field
+    setCustomerName(selectedCustomer?.customerName || "");
+    setCustomerEmail(selectedCustomer?.email || "");
     setReturns([]);
-    setSelectedReturnNos([]); // Reset selected return numbers
+    setSelectedReturnNos([]);
+
+    // 💸 Set credit balance (for wallet feature)
+    const creditAmount = selectedCustomer?.advanceCreditAmount || 0;
+    setCreditBalance(creditAmount);
+
+    // 🧼 Optional: Reset paymentType & paidAmount to avoid conflicts
+    setPaymentType("");
+    setPaidAmount(0);
+    setErrors((prev) => ({ ...prev, paidAmount: "" }));
   };
 
   const handlePaidAmountChange = (e) => {
@@ -498,6 +512,54 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
             )}
           </div>
 
+          {/* Payment Type (Now Aligned Properly) */}
+          <div className="col-12 col-md-4">
+            <label className="form-label">
+              Payment Type <span className="text-danger">*</span>
+            </label>
+            <Select
+              options={[
+                { value: "Cash", label: "Cash" },
+                { value: "Cheque", label: "Cheque" },
+                { value: "UPI", label: "UPI" },
+                ...(creditBalance > 0
+                  ? [
+                      {
+                        value: "Credits",
+                        label: `Credits (Wallet ₹${creditBalance})`,
+                      },
+                    ]
+                  : []),
+              ]}
+              value={
+                paymentType
+                  ? {
+                      value: paymentType,
+                      label:
+                        paymentType === "Credits"
+                          ? `Credits (Wallet ₹${creditBalance})`
+                          : paymentType.charAt(0).toUpperCase() +
+                            paymentType.slice(1),
+                    }
+                  : null
+              }
+              onChange={(selectedOption) => {
+                resetAllocations();
+                setPaymentType(selectedOption.value);
+                // Reset paid amount when changing payment type
+                setPaidAmount(0);
+                setErrors((prev) => ({ ...prev, paidAmount: "" }));
+              }}
+              isDisabled={isSubmitting}
+              isSearchable
+              placeholder="Select Payment Type"
+              className="basic-single"
+              classNamePrefix="select"
+            />
+            {errors.paymentType && (
+              <small className="text-danger">{errors.paymentType}</small>
+            )}
+          </div>
           {/* Paid Amount */}
           <div className="col-12 col-md-4">
             <label className="form-label">
@@ -507,7 +569,46 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
               type="number"
               className="form-control"
               value={paidAmount}
-              onChange={handlePaidAmountChange}
+              onChange={(e) => {
+                resetAllocations(); // Reset allocations when changing paid amount
+                const value = e.target.value;
+                setPaidAmount(value); // Always update the input field first
+
+                const parsedValue = parseFloat(value);
+
+                if (isNaN(parsedValue) || parsedValue < 0) {
+                  setErrors((prev) => ({
+                    ...prev,
+                    paidAmount: "Enter a valid number.",
+                  }));
+                  return;
+                }
+
+                if (paymentType === "Credits") {
+                  if (parsedValue > creditBalance) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      paidAmount: `Insufficient credits. You only have ₹${creditBalance}.`,
+                    }));
+                  } else if (parsedValue > totalBalanceAmount) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      paidAmount: ` Cannot pay more than total balance: ₹${totalBalanceAmount}.`,
+                    }));
+                  } else {
+                    setErrors((prev) => ({ ...prev, paidAmount: "" }));
+                  }
+                } else {
+                  if (parsedValue > totalBalanceAmount) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      paidAmount: `Select Returns first. Cannot pay more than total balance: ₹${totalBalanceAmount}.`,
+                    }));
+                  } else {
+                    setErrors((prev) => ({ ...prev, paidAmount: "" }));
+                  }
+                }
+              }}
               onKeyDown={(e) => {
                 if (e.key === "-" || e.key === "e") {
                   e.preventDefault();
@@ -520,46 +621,28 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
             {errors.paidAmount && (
               <small className="text-danger">{errors.paidAmount}</small>
             )}
-          </div>
-
-          {/* Payment Type (Now Aligned Properly) */}
-          <div className="col-12 col-md-4">
-            <label className="form-label">
-              Payment Type <span className="text-danger">*</span>
-            </label>
-            <Select
-              options={[
-                { value: "Cash", label: "Cash" },
-                { value: "Cheque", label: "Cheque" },
-                { value: "UPI", label: "UPI" },
-              ]}
-              value={
-                // Find the value from the paymentType state or return null if not found
-                paymentType
-                  ? {
-                      value: paymentType,
-                      label:
-                        paymentType.charAt(0).toUpperCase() +
-                        paymentType.slice(1),
-                    }
-                  : null
-              }
-              onChange={handleChange}
-              isDisabled={isSubmitting}
-              isSearchable
-              placeholder="Select Payment Type"
-              className="basic-single"
-              classNamePrefix="select"
-            />
-            {errors.paymentType && (
-              <small className="text-danger">{errors.paymentType}</small>
-            )}
+            {/* Credits warning */}
+            {paymentType === "Credits" &&
+              Number(paidAmount) > 0 &&
+              Number(paidAmount) <= creditBalance &&
+              Number(paidAmount) <= totalBalanceAmount &&
+              !errors.paidAmount && (
+                <small className="text-danger d-block mt-1">
+                  ₹{paidAmount} will be deducted from your credits.{" "}
+                  {creditBalance > paidAmount && (
+                    <span>
+                      Remaining Wallet Balance: ₹
+                      {(creditBalance - paidAmount).toFixed(2)}
+                    </span>
+                  )}
+                </small>
+              )}
           </div>
         </div>
 
         {selectedCustomer && returns.length > 0 ? (
-          <div className="orders-section mb-3">
-            <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-2">
+          <div className="orders-section mb-0 mt-3">
+            <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-0">
               <h5 className="mb-0">Returns</h5>
               <div className="d-flex flex-wrap gap-2">
                 <Button
@@ -653,8 +736,10 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
                           }
 
                           const url = `${
-                              import.meta.env.VITE_API_BASE_URL2
-                            }/app/transactions/onrentreturn?returnNumber=${ret.returnNumber}`;
+                            import.meta.env.VITE_API_BASE_URL2
+                          }/app/transactions/onrentreturn?returnNumber=${
+                            ret.returnNumber
+                          }`;
                           window.open(url, "_blank");
                         }}
                       >

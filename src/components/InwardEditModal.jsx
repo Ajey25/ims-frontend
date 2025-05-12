@@ -7,6 +7,7 @@ import Pdf from "../assets/pdf-icon.png";
 import { FaTimes } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
   const [inwardNo, setInwardNo] = useState("");
   const [inwardDate, setInwardDate] = useState(new Date());

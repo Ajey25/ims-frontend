@@ -19,6 +19,7 @@ import OnRentReturn from "./pages/Transactions/OnRentReturn";
 import Payment from "./pages/Transactions/Payment";
 import OnRent from "./pages/Transactions/OnRent";
 import CustomerReports from "./pages/Reports/CustomerReports";
+import CustomerCredits from "./pages/Masters/CustomerCredits";
 
 // ProtectedRoute component that checks if user is authenticated
 const ProtectedRoute = ({ children }) => {
@@ -47,16 +48,18 @@ const App = () => {
               index
               element={<Navigate to="masters/item-master" replace />}
             />
-
             {/* Masters routes */}
             <Route path="masters/item-master" element={<ItemMaster />} />
             <Route
               path="masters/customer-master"
               element={<CustomerMaster />}
+            />{" "}
+            <Route
+              path="masters/customercredits"
+              element={<CustomerCredits />}
             />
             <Route path="masters/usermaster" element={<UserMaster />} />
             <Route path="masters/stockmaster" element={<StockMaster />} />
-
             {/* Transactions routes */}
             <Route path="transactions/inward" element={<Inward />} />
             <Route path="transactions/onrent" element={<OnRent />} />
@@ -65,7 +68,6 @@ const App = () => {
               element={<OnRentReturn />}
             />
             <Route path="transactions/payment" element={<Payment />} />
-
             {/* Reports route */}
             <Route
               path="reports/customerreports"

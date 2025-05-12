@@ -66,6 +66,8 @@ const Navbar = ({
           return "Item Master";
         case "/app/masters/customer-master":
           return "Customer Master";
+        case "/app/masters/customercredits":
+          return "Customer Master";
         case "/app/masters/usermaster":
           return "User Master";
         case "/app/masters/stockmaster":
@@ -97,6 +99,12 @@ const Navbar = ({
     refreshSession();
     setShowDropdown(false);
   };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft(getSessionTimeRemaining());
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <nav

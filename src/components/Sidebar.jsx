@@ -113,6 +113,19 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
                 </li>
                 <li>
                   <Link
+                    to="/app/masters/customercredits"
+                    className={`nav-link text-white py-2 ${
+                      location.pathname === "/app/masters/customercredits"
+                        ? "active"
+                        : ""
+                    }`}
+                    onClick={isMobile ? toggleSidebar : undefined}
+                  >
+                    Customer Credits
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     to="/app/masters/stockmaster"
                     className={`nav-link text-white py-2 ${
                       location.pathname === "/app/masters/stockmaster"

@@ -50,6 +50,15 @@ const Reports = () => {
       return null;
     }
 
+    const formatDate = (dateStr) => {
+      if (!dateStr) return "";
+      const date = new Date(dateStr);
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    };
+
     const doc = new jsPDF();
     doc.setFontSize(12);
 
@@ -105,13 +114,13 @@ const Reports = () => {
         body: [
           ...filteredData.map((record) => [
             record.onRentNo,
-            record.onRentDate,
+            formatDate(record.onRentDate),
             record.itemName,
             record.uom,
             record.totalQty,
             record.returnQty,
             record.balanceQty,
-            record.onRentReturnDate,
+            formatDate(record.onRentReturnDate),
             record.perDayRate,
             record.usedDays,
             record.amount ? record.amount.toFixed(2) : "0.00",
@@ -145,7 +154,7 @@ const Reports = () => {
         head: [["Payment Date", "Payment Type", "Paid Amount"]],
         body: [
           ...filteredPaymentData.map((payment) => [
-            payment.paymentDate,
+            formatDate(payment.paymentDate),
             payment.paymentType,
             payment.paymentAmount.toFixed(2),
           ]),
@@ -515,8 +524,9 @@ const Reports = () => {
                 </div>
 
                 {/* Summary Section */}
-                <div className="mt-4 p-3 border rounded bg-light shadow-lg">
-                  <h4 className="text-center">Summary</h4>
+                <h4 className="">Summary</h4>
+
+                <div className="mt-0 p-3 border rounded bg-light shadow-lg">
                   <div className="row text-center text-md-start">
                     <div className="col-12 col-md-4 mb-2">
                       <p className="mb-1">
