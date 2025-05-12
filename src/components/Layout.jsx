@@ -29,7 +29,7 @@ const Layout = () => {
     const timeoutId = setTimeout(() => {
       clearAdminLoginStatus();
       navigate("/", { replace: true });
-      toast.error("Session expired. Please log in again.");
+      toast.error("Session expired! Please log in again.");
     }, SESSION_DURATION);
 
     // Clean up the timeout when the component is unmounted or session is valid
