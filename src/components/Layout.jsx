@@ -1,88 +1,74 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import Offline from "../components/Offline";
 import {
   getAdminLoginStatus,
   SESSION_DURATION,
+  clearAdminLoginStatus,
 } from "../utils/localStorageUtils";
-import { toast } from "react-toastify"; // Import toast from react-toastify
+import { toast } from "react-toastify";
 
 const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isDimmed, setIsDimmed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [theme, setTheme] = useState("light");
-  const [isOnline, setIsOnline] = useState(navigator.onLine); // Track network status
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Session Check
   useEffect(() => {
-    // Check session validity on mount
     if (!getAdminLoginStatus()) {
       localStorage.clear();
       navigate("/");
     }
 
-    // Set a timer to log out after 1 minute (60 seconds)
     const timeoutId = setTimeout(() => {
       clearAdminLoginStatus();
       navigate("/", { replace: true });
       toast.error("Session expired! Please log in again.");
     }, SESSION_DURATION);
 
-    // Clean up the timeout when the component is unmounted or session is valid
     return () => clearTimeout(timeoutId);
   }, [navigate]);
 
+  // Online/Offline listeners
   useEffect(() => {
-    // Listen to online/offline events
     const handleOnline = () => {
       setIsOnline(true);
-      toast.dismiss(); // Dismiss the "Disconnected" message when back online
-      toast.success("You are back online!"); // Show the online message
+      toast.dismiss();
+      toast.success("You are back online!");
     };
 
     const handleOffline = () => {
       setIsOnline(false);
-      toast.error("Oops! You’re offline. Check your connection!"); // Show the disconnected message
+      toast.error("Oops! You're offline. Check your connection!");
     };
 
-    // Add event listeners for online/offline
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
-    // Cleanup event listeners
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
   }, []);
-  const prevPathRef = useRef(location.pathname);
 
-  useEffect(() => {
-    const prevPath = prevPathRef.current;
-    const newPath = location.pathname;
-
-    if (!isOnline && newPath !== prevPath) {
-      // If offline and route changes -> force reload to new path
-      window.location.href = newPath;
-    }
-
-    prevPathRef.current = newPath;
-  }, [location.pathname, isOnline]);
-
+  // Theme toggle
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
     setIsDimmed((prev) => !prev);
     document.documentElement.style.setProperty(
       "--background-color",
-      theme === "light" ? "#ccc" : "#e5e5e5" // Switch based on current theme
+      theme === "light" ? "#ccc" : "#e5e5e5"
     );
   };
 
-  // Handle window resize
+  // Resize handler
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -93,12 +79,16 @@ const Layout = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Toggle Sidebar
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
+  // If offline, show Offline page
+  if (!isOnline) {
+    return <Offline />;
+  }
 
   return (
     <div
-      className="d-flex vh-100 position-relative "
+      className="d-flex vh-100 position-relative"
       style={{
         backgroundColor: theme === "light" ? "#e5e5e5" : "#ccc",
       }}
@@ -142,12 +132,12 @@ const Layout = () => {
         <AnimatePresence mode="wait">
           <motion.div
             key={`navbar-${location.pathname}`}
-            initial={{ opacity: 0, x: -100 }} // Enter from left
-            animate={{ opacity: 1, x: 0 }} // Centered
-            exit={{ opacity: 0, x: 100 }} // Exit to right
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
             transition={{
               duration: 0.3,
-              ease: [0.2, 0.0, 0.1, 1], // Smooth cubic easing
+              ease: [0.2, 0.0, 0.1, 1],
             }}
             className="sticky-top"
           >
@@ -168,12 +158,12 @@ const Layout = () => {
             <AnimatePresence mode="wait">
               <motion.div
                 key={location.pathname}
-                initial={{ opacity: 0, x: -100 }} // Always from left
+                initial={{ opacity: 0, x: -100 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 100 }} // Always to right
+                exit={{ opacity: 0, x: 100 }}
                 transition={{
                   duration: 0.3,
-                  ease: [0.3, 0.0, 0.2, 1], // Smooth cubic easing
+                  ease: [0.3, 0.0, 0.2, 1],
                 }}
               >
                 <Outlet />
