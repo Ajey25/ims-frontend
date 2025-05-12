@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "./Navbar";
@@ -17,10 +17,13 @@ const Layout = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [theme, setTheme] = useState("light");
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [forceOfflinePage, setForceOfflinePage] = useState(false);
+
+  const previousPath = useRef(window.location.pathname);
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Session Check
+  // Session timeout handling
   useEffect(() => {
     if (!getAdminLoginStatus()) {
       localStorage.clear();
@@ -36,10 +39,11 @@ const Layout = () => {
     return () => clearTimeout(timeoutId);
   }, [navigate]);
 
-  // Online/Offline listeners
+  // Online/Offline event listeners
   useEffect(() => {
     const handleOnline = () => {
       setIsOnline(true);
+      setForceOfflinePage(false);
       toast.dismiss();
       toast.success("You are back online!");
     };
@@ -58,31 +62,42 @@ const Layout = () => {
     };
   }, []);
 
+  // Force Offline Page only on route change while offline
+  useEffect(() => {
+    if (!isOnline && location.pathname !== previousPath.current) {
+      setForceOfflinePage(true);
+    } else {
+      previousPath.current = location.pathname;
+    }
+  }, [location.pathname, isOnline]);
+
   // Theme toggle
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
     setIsDimmed((prev) => !prev);
     document.documentElement.style.setProperty(
       "--background-color",
-      theme === "light" ? "#ccc" : "#e5e5e5"
+      newTheme === "light" ? "#e5e5e5" : "#ccc"
     );
   };
 
-  // Resize handler
+  // Responsive layout listener
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
       if (window.innerWidth <= 768) setIsSidebarOpen(false);
     };
+
     window.addEventListener("resize", handleResize);
-    handleResize();
+    handleResize(); // Initial check
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  // If offline, show Offline page
-  if (!isOnline) {
+  // Show Offline component if forced
+  if (forceOfflinePage) {
     return <Offline />;
   }
 
@@ -128,17 +143,14 @@ const Layout = () => {
         className="flex-grow-1 d-flex flex-column"
         style={{ height: "100vh", overflow: "hidden", width: "100%" }}
       >
-        {/* Animated Navbar */}
+        {/* Navbar */}
         <AnimatePresence mode="wait">
           <motion.div
             key={`navbar-${location.pathname}`}
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 100 }}
-            transition={{
-              duration: 0.3,
-              ease: [0.2, 0.0, 0.1, 1],
-            }}
+            transition={{ duration: 0.3, ease: [0.2, 0.0, 0.1, 1] }}
             className="sticky-top"
           >
             <Navbar
@@ -152,7 +164,7 @@ const Layout = () => {
           </motion.div>
         </AnimatePresence>
 
-        {/* Animated Page Content */}
+        {/* Page Content */}
         <div className="flex-grow-1 overflow-auto">
           <div className="container-fluid p-3">
             <AnimatePresence mode="wait">
@@ -161,10 +173,7 @@ const Layout = () => {
                 initial={{ opacity: 0, x: -100 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 100 }}
-                transition={{
-                  duration: 0.3,
-                  ease: [0.3, 0.0, 0.2, 1],
-                }}
+                transition={{ duration: 0.3, ease: [0.3, 0.0, 0.2, 1] }}
               >
                 <Outlet />
               </motion.div>
