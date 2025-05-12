@@ -252,3 +252,32 @@ body,
 .shadow-xl {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25); /* adjust to taste */
 }
+.offline-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f2f5, #dfe6ed);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #333;
+  padding: 20px;
+}
+
+.offline-icon {
+  color: #ff6b6b;
+  /* margin-bottom: 20px; */
+}
+
+.offline-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.offline-message {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 400px;
+}
