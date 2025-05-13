@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Logo from "../assets/logo.png";
 import {
   FaBars,
   FaBox,
@@ -33,7 +34,10 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
     >
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
-        <h5 className={isSidebarOpen ? "mb-0" : "d-none"}>Menu</h5>
+        <h5 className={isSidebarOpen ? "mb-0" : "d-none"}>
+          <img src={Logo} style={{ height: "30px", width: "30px" }} /> {"  "}{" "}
+          {"  "} RIMS
+        </h5>
         {(!isMobile || (isMobile && isSidebarOpen)) && (
           <button
             className="btn btn-outline-light btn-sm"
@@ -43,6 +47,17 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
           </button>
         )}
       </div>
+      {/* <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
+        <h5 className={isSidebarOpen ? "mb-0" : "d-none"}>Menu</h5>
+        {(!isMobile || (isMobile && isSidebarOpen)) && (
+          <button
+            className="btn btn-outline-light btn-sm"
+            onClick={toggleSidebar}
+          >
+            {isMobile ? <FaTimes /> : <FaBars />}
+          </button>
+        )}
+      </div> */}
 
       {/* Scrollable Menu */}
       <div className="flex-grow-1 overflow-auto">
