@@ -48,7 +48,7 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
       const data = await response.json();
       if (data.exists) {
         setEmailError({
-          message: "Email already in use",
+          message: "This email is already taken.",
           color: "text-danger",
         });
         setEmailValid(false);
