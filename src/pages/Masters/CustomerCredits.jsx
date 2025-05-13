@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Lottie from "lottie-react";
 import PaymentAnimation from "../../assets/payment.json";
 import Payment2 from "../../assets/payment2.json";
+import { FaCalendarAlt } from "react-icons/fa";
 
 const CustomerCredits = () => {
   const [customers, setCustomers] = useState([]);
@@ -210,14 +211,22 @@ const CustomerCredits = () => {
 
           <div className="col-md-4 mb-3">
             <strong>Payment Date</strong>
-            <DatePicker
-              selected={paymentDate}
-              onChange={handleDateChange}
-              dateFormat="dd/MM/yyyy"
-              className="form-control date"
-              placeholderText="dd/mm/yyyy"
-              onChangeRaw={handleDateChangeRaw}
-            />
+            <div className="datepicker-wrapper position-relative">
+              <DatePicker
+                selected={paymentDate}
+                onChange={handleDateChange}
+                dateFormat="dd/MM/yyyy"
+                className="form-control date"
+                placeholderText="dd/mm/yyyy"
+                onChangeRaw={handleDateChangeRaw}
+              />
+              <FaCalendarAlt
+                className="calendar-icon"
+                onClick={() =>
+                  document.querySelector(".datepicker-wrapper input").focus()
+                }
+              />
+            </div>
             {errors.paymentDate && (
               <div className="text-danger small mt-1">{errors.paymentDate}</div>
             )}

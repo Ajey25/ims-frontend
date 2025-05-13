@@ -7,6 +7,8 @@ import { FaTimes } from "react-icons/fa";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { FaCalendarAlt } from "react-icons/fa";
+
 const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
   const [onRentNo, setOnRentNo] = useState(new Date());
   const [onRentDate, setOnRentDate] = useState("");
@@ -178,19 +180,25 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
 
     const vehicleErrors = {};
 
-    const validateLength = (value, fieldName) => {
-      if (!value || value.trim().length < 3) {
+    const validateLengthAndFormat = (value, fieldName) => {
+      const trimmed = value.trim();
+      if (/^\d/.test(trimmed)) {
+        return `${fieldName} should not start with a number.`;
+      }
+      if (trimmed.length < 3) {
         return `${fieldName} must be at least 3 characters long.`;
       }
-      if (value.trim().length > 20) {
+
+      if (trimmed.length > 20) {
         return `${fieldName} must be less than 20 characters.`;
       }
+
       return null;
     };
 
     // Only validate vehicle details if they are provided
     if (vehicleDetails.vehicleName) {
-      const vehicleNameError = validateLength(
+      const vehicleNameError = validateLengthAndFormat(
         vehicleDetails.vehicleName,
         "Vehicle Name"
       );
@@ -198,7 +206,7 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
     }
 
     if (vehicleDetails.vehicleNo) {
-      const vehicleNoError = validateLength(
+      const vehicleNoError = validateLengthAndFormat(
         vehicleDetails.vehicleNo,
         "Vehicle Number"
       );
@@ -206,7 +214,7 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
     }
 
     if (vehicleDetails.driverName) {
-      const driverNameError = validateLength(
+      const driverNameError = validateLengthAndFormat(
         vehicleDetails.driverName,
         "Driver Name"
       );
@@ -439,14 +447,24 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
                 <label className="form-label">
                   On Rent Date <span className="text-danger">*</span>
                 </label>
-                <DatePicker
-                  selected={onRentDate}
-                  onChange={handleDateChange}
-                  onChangeRaw={handleDateChangeRaw}
-                  dateFormat="dd/MM/yyyy"
-                  placeholderText="dd/MM/yyyy"
-                  className="form-control"
-                />
+                <div className="datepicker-wrapper position-relative">
+                  <DatePicker
+                    selected={onRentDate}
+                    onChange={handleDateChange}
+                    onChangeRaw={handleDateChangeRaw}
+                    dateFormat="dd/MM/yyyy"
+                    placeholderText="dd/MM/yyyy"
+                    className="form-control"
+                  />
+                  <FaCalendarAlt
+                    className="calendar-icon"
+                    onClick={() =>
+                      document
+                        .querySelector(".datepicker-wrapper input")
+                        .focus()
+                    }
+                  />
+                </div>
                 {errors.onRentDate && (
                   <small className="text-danger">{errors.onRentDate}</small>
                 )}

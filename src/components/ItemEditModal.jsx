@@ -21,6 +21,7 @@ const ItemEditModal = ({ item, onSave, onClose, isSaving }) => {
   const validate = () => {
     let tempErrors = {};
     const specialCharPattern = /[^a-zA-Z0-9 _-]/;
+    const startsWithNumberPattern = /^[0-9]/;
 
     if (!itemName.trim()) {
       tempErrors.itemName = "Item Name is required.";
@@ -28,6 +29,10 @@ const ItemEditModal = ({ item, onSave, onClose, isSaving }) => {
       tempErrors.itemName = "Item Name should not contain special characters.";
     } else if (itemName.startsWith(" ")) {
       tempErrors.itemName = "Item Name should not start with a space.";
+    } else if (startsWithNumberPattern.test(itemName)) {
+      tempErrors.itemName = "Item Name should not start with a number.";
+    } else if (itemName.length < 4) {
+      tempErrors.itemName = "Item Name should be at least 4 characters.";
     } else if (itemName.length > 20) {
       tempErrors.itemName = "Item Name should not exceed 20 characters.";
     }
@@ -38,12 +43,18 @@ const ItemEditModal = ({ item, onSave, onClose, isSaving }) => {
       tempErrors.itemCode = "Item Code should not contain special characters.";
     } else if (itemCode.startsWith(" ")) {
       tempErrors.itemCode = "Item Code should not start with a space.";
+    } else if (startsWithNumberPattern.test(itemCode)) {
+      tempErrors.itemCode = "Item Code should not start with a number.";
+    } else if (itemCode.length < 4) {
+      tempErrors.itemCode = "Item Code should be at least 4 characters.";
     } else if (itemCode.length > 20) {
       tempErrors.itemCode = "Item Code should not exceed 20 characters.";
     }
 
     if (!description.trim()) {
       tempErrors.description = "Description is required.";
+    } else if (description.length < 4) {
+      tempErrors.description = "Description should be at least 4 characters.";
     }
 
     if (!status) {

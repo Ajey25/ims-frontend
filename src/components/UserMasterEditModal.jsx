@@ -35,13 +35,18 @@ const UserMasterEditModal = ({ user, onSave, onClose, isSaving }) => {
 
   const validate = () => {
     let newErrors = {};
-
-    if (!formData.firstName || formData.firstName.length < 3) {
+    const startsWithNumber = /^[0-9]/;
+    if (startsWithNumber.test(formData.firstName)) {
+      newErrors.firstName = "First Name should not start with a number.";
+    } else if (!formData.firstName || formData.firstName.length < 3) {
       newErrors.firstName = "First Name must be at least 3 characters long.";
     } else if (formData.firstName.length > 20) {
       newErrors.firstName = "First Name must not exceed 20 characters.";
     }
-    if (!formData.lastName || formData.lastName.length < 3) {
+
+    if (startsWithNumber.test(formData.lastName)) {
+      newErrors.lastName = "Last Name should not start with a number.";
+    } else if (!formData.lastName || formData.lastName.length < 3) {
       newErrors.lastName = "Last Name must be at least 3 characters long.";
     } else if (formData.lastName.length > 20) {
       newErrors.lastName = "Last Name must not exceed 20 characters.";
@@ -58,6 +63,7 @@ const UserMasterEditModal = ({ user, onSave, onClose, isSaving }) => {
       newErrors.mobileNo =
         "Mobile number must be exactly 10 digits and contain only numbers.";
     }
+
     if (!user) {
       if (!formData.password || formData.password.length < 4) {
         newErrors.password = "Password must be at least 4 characters long.";

@@ -281,3 +281,30 @@ body,
   color: #555;
   max-width: 400px;
 }
+
+.datepicker-wrapper {
+  width: 100%;
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #555;
+  font-size: 1.1rem;
+  z-index: 2;
+}
+
+/* Improve touch space on mobile */
+@media (max-width: 576px) {
+  .calendar-icon {
+    font-size: 1rem;
+    right: 10px;
+  }
+
+  .form-control {
+    padding-right: 2.2rem !important; /* leave room for the icon */
+  }
+}

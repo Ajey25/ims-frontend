@@ -142,8 +142,8 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
       tempErrors.address = "Address should not start with a space";
     } else if (address.length < 4) {
       tempErrors.address = "Address must be at least 4 characters long";
-    } else if (address.length > 40) {
-      tempErrors.address = "Address must not exceed 40 characters";
+    } else if (address.length > 52) {
+      tempErrors.address = "Address must not exceed 52 characters";
     }
 
     if (!status) {

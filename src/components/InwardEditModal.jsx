@@ -7,6 +7,7 @@ import Pdf from "../assets/pdf-icon.png";
 import { FaTimes } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { FaCalendarAlt } from "react-icons/fa";
 
 const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
   const [inwardNo, setInwardNo] = useState("");
@@ -375,19 +376,27 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
       <form onSubmit={handleSubmit} className="card p-3">
         <div className="row mb-3">
           <div className="col-md-6">
-            <div className="mb-3 ">
-              <label className="form-label">Inward Date</label>
-              <br />
-              <DatePicker
-                selected={inwardDate}
-                onChange={handleDateChange}
-                dateFormat="dd/MM/yyyy"
-                className="form-control date"
-                placeholderText="dd/mm/yyyy"
-                onChangeRaw={handleDateChangeRaw}
-              />
+            <div className="mb-3">
+              <label className="form-label">
+                Inward Date <span className="text-danger">*</span>
+              </label>
+              <div className="datepicker-wrapper position-relative">
+                <DatePicker
+                  selected={inwardDate}
+                  onChange={handleDateChange}
+                  dateFormat="dd/MM/yyyy"
+                  className="form-control"
+                  placeholderText="dd/mm/yyyy"
+                  onChangeRaw={handleDateChangeRaw}
+                />
+                <FaCalendarAlt
+                  className="calendar-icon"
+                  onClick={() =>
+                    document.querySelector(".datepicker-wrapper input").focus()
+                  }
+                />
+              </div>
 
-              <br />
               {errors.inwardDate && (
                 <small className="text-danger">{errors.inwardDate}</small>
               )}

@@ -7,6 +7,8 @@ import axios from "axios";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { FaCalendarAlt } from "react-icons/fa";
+
 const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
   // Basic form states
   const [onRentReturnNo, setOnRentReturnNo] = useState("");
@@ -538,36 +540,23 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
     selectedOnRentRefs.includes(item.onRentId)
   );
 
-  // Render UOM select
-  const renderUomSelect = (itemId, uomLabel) => {
-    const currentUom = uomOptions.find((u) => u.uom === uomLabel);
-    const currentUomId = currentUom?.id || "";
-
-    return (
-      <Form.Select
-        size="sm"
-        value={currentUomId}
-        onChange={(e) =>
-          handleInputChange(itemId, "uomId", parseInt(e.target.value))
-        }
-      >
-        <option value="">Select UOM</option>
-        {uomOptions.map((uom) => (
-          <option key={uom.id} value={uom.id}>
-            {uom.uom}
-          </option>
-        ))}
-      </Form.Select>
-    );
-  };
   const validateLength = (value, fieldName) => {
-    if (value.trim().length < 4) {
+    const trimmedValue = value.trim();
+
+    // Check if the value starts with a number
+    if (/^\d/.test(trimmedValue)) {
+      return `${fieldName} should not start with a number.`;
+    }
+
+    // Check length constraints
+    if (trimmedValue.length < 4) {
       return `${fieldName} must be at least 4 characters long.`;
     }
-    if (value.trim().length > 20) {
+    if (trimmedValue.length > 20) {
       return `${fieldName} must be less than 20 characters long.`;
     }
-    return null;
+
+    return null; // No errors
   };
 
   const validate = () => {
@@ -590,7 +579,6 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
       );
       if (vehicleNoError) vehicleErrors.vehicleNo = vehicleNoError;
     }
-
     if (vehicleDetails.driverName) {
       const driverNameError = validateLength(
         vehicleDetails.driverName,
@@ -749,23 +737,32 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
       </div>
 
       <form onSubmit={handleSubmit} className="p-3 card shadow-sm ">
-        <div className="row ">
+        <div className="row mb-3">
           <div className="col-md-6">
-            {/* Return Date */}
-            <div>
-              <label className="form-label">Return Date</label>
-              <DatePicker
-                selected={onRentReturnDate}
-                onChange={(date) => {
-                  handleDateChange(date);
-                  setSelectedItems([]);
-                  setSelectedOnRentRefs([]);
-                }}
-                onChangeRaw={handleDateChangeRaw}
-                dateFormat="dd/MM/yyyy"
-                placeholderText="dd/MM/yyyy"
-                className="form-control"
-              />
+            <div className="mb-3">
+              <label className="form-label">
+                Return Date <span className="text-danger">*</span>
+              </label>
+              <div className="datepicker-wrapper position-relative">
+                <DatePicker
+                  selected={onRentReturnDate}
+                  onChange={(date) => {
+                    handleDateChange(date);
+                    setSelectedItems([]);
+                    setSelectedOnRentRefs([]);
+                  }}
+                  onChangeRaw={handleDateChangeRaw}
+                  dateFormat="dd/MM/yyyy"
+                  placeholderText="dd/MM/yyyy"
+                  className="form-control"
+                />
+                <FaCalendarAlt
+                  className="calendar-icon"
+                  onClick={() =>
+                    document.querySelector(".datepicker-wrapper input").focus()
+                  }
+                />
+              </div>
               {errors.onRentReturnDate && (
                 <small className="text-danger">{errors.onRentReturnDate}</small>
               )}
