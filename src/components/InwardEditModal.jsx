@@ -657,7 +657,7 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
           </div>
         )}
 
-        <div className="d-flex justify-content-end gap-2">
+        <div className="d-flex justify-content-center gap-2">
           <Button variant="primary" type="submit" disabled={isSaving}>
             {isSaving
               ? inward
@@ -665,7 +665,7 @@ const InwardEditModal = ({ inward, onSave, onClose, isSaving }) => {
                 : "Saving..."
               : inward
               ? "Update"
-              : "Save"}{" "}
+              : "Save Inward"}{" "}
           </Button>
         </div>
       </form>

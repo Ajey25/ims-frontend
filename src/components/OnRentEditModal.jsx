@@ -561,7 +561,11 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
           </label>
           <div className="d-flex gap-2 align-items-center mb-2">
             <Dropdown>
-              <Dropdown.Toggle variant="primary" id="dropdown-items">
+              <Dropdown.Toggle
+                variant="primary"
+                id="dropdown-items"
+                disabled={!customerName}
+              >
                 Select Items
               </Dropdown.Toggle>
 
@@ -730,7 +734,7 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
           </div>
         )}
 
-        <div className="d-flex justify-content-end gap-2">
+        <div className="d-flex justify-content-center gap-2">
           <Button variant="primary" type="submit" disabled={isSaving}>
             {isSaving
               ? onRent
@@ -738,7 +742,7 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
                 : "Saving..."
               : onRent
               ? "Update"
-              : "Save"}{" "}
+              : "Save Rent"}{" "}
           </Button>
         </div>
       </form>

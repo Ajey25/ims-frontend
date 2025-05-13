@@ -53,7 +53,10 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
               className={`nav-link text-white d-flex align-items-center w-100 bg-transparent border-0 ${
                 isMasterOpen ? "is-open" : ""
               }`}
-              onClick={() => setIsMasterOpen(!isMasterOpen)}
+              onClick={() => {
+                if (!isSidebarOpen) toggleSidebar();
+                setIsMasterOpen(!isMasterOpen);
+              }}
             >
               <FaBox className="me-2" size={20} />
               {isSidebarOpen && (
@@ -147,7 +150,10 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
               className={`nav-link text-white d-flex align-items-center w-100 bg-transparent border-0 ${
                 isTransactionOpen ? "is-open" : ""
               }`}
-              onClick={() => setIsTransactionOpen(!isTransactionOpen)}
+              onClick={() => {
+                if (!isSidebarOpen) toggleSidebar();
+                setIsTransactionOpen(!isTransactionOpen);
+              }}
             >
               <FaFileInvoice className="me-2" size={20} />
               {isSidebarOpen && (
@@ -227,7 +233,10 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
               className={`nav-link text-white d-flex align-items-center w-100 bg-transparent border-0 ${
                 isReportsOpen ? "is-open" : ""
               }`}
-              onClick={() => setIsReportsOpen(!isReportsOpen)}
+              onClick={() => {
+                if (!isSidebarOpen) toggleSidebar();
+                setIsReportsOpen(!isReportsOpen);
+              }}
             >
               <FaChartBar className="me-2" size={20} />
 

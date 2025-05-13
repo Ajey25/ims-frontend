@@ -166,14 +166,7 @@ const UserMasterEditModal = ({ user, onSave, onClose, isSaving }) => {
           </form>
         </div>
 
-        <div className=" text-end p-3">
-          <button
-            type="button"
-            className="btn btn-secondary me-2"
-            onClick={onClose}
-          >
-            Close
-          </button>
+        <div className=" text-center p-3">
           <button
             type="submit"
             className="btn btn-primary"
@@ -186,7 +179,7 @@ const UserMasterEditModal = ({ user, onSave, onClose, isSaving }) => {
                 : "Saving..."
               : user
               ? "Update"
-              : "Save"}
+              : "Save User"}
           </button>
         </div>
       </div>

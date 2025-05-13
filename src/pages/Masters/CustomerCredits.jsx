@@ -224,9 +224,9 @@ const CustomerCredits = () => {
           </div>
         </div>
 
-        <div className="text-end mt-2">
+        <div className="text-center mt-2">
           <button className="btn btn-primary" onClick={handleSave}>
-            Save
+            Save Credits
           </button>
         </div>
 

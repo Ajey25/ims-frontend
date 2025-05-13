@@ -291,9 +291,32 @@ const OnRent = () => {
   const totalPages = Math.ceil(filteredOnRent.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
-  const paginatedOnRent = [...filteredOnRent]
-    .reverse()
-    .slice(startIndex, endIndex);
+  const sortedOnRent = [...filteredOnRent].sort((a, b) => {
+    const aIsActive = a.isActive;
+    const bIsActive = b.isActive;
+
+    const aEditable =
+      aIsActive && a.items.every((item) => item.qtyReturn === 0);
+    const bEditable =
+      bIsActive && b.items.every((item) => item.qtyReturn === 0);
+
+    // Priority 1: Active before Inactive
+    if (aIsActive !== bIsActive) {
+      return aIsActive ? -1 : 1;
+    }
+
+    // Priority 2: Among active ones, editable first
+    if (aEditable !== bEditable) {
+      return aEditable ? -1 : 1;
+    }
+
+    // Priority 3: Sort by onRentDate (latest first)
+    const dateA = new Date(a.onRentDate);
+    const dateB = new Date(b.onRentDate);
+    return dateB - dateA;
+  });
+
+  const paginatedOnRent = sortedOnRent.slice(startIndex, endIndex);
 
   return (
     <div className="container px-0 ">

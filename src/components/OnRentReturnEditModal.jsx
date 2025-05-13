@@ -1234,7 +1234,7 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
           </div>
         )}
 
-        <div className="d-flex justify-content-end">
+        <div className="d-flex justify-content-center">
           <Button variant="primary" type="submit" disabled={isSaving}>
             {isSaving
               ? orr
@@ -1242,7 +1242,7 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
                 : "Saving..."
               : orr
               ? "Update"
-              : "Save"}{" "}
+              : "Save Return"}{" "}
           </Button>
         </div>
       </form>

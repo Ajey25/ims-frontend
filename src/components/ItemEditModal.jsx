@@ -209,7 +209,7 @@ const ItemEditModal = ({ item, onSave, onClose, isSaving }) => {
               </div>
             </div>
 
-            <div className="d-flex justify-content-end">
+            <div className="d-flex justify-content-center">
               <button
                 type="submit"
                 className="btn btn-primary"
@@ -221,7 +221,7 @@ const ItemEditModal = ({ item, onSave, onClose, isSaving }) => {
                     : "Saving..."
                   : item
                   ? "Update"
-                  : "Save"}
+                  : "Save Item"}
               </button>
             </div>
           </form>

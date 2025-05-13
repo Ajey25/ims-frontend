@@ -78,7 +78,7 @@ const CustomerMaster = () => {
       console.error("Error adding customer:", error);
       // alert("failed to add customer ,maybe gmail is already used ");
       // setShowEditForm(true);
-      toast.error("failed to add customer ,maybe gmail is already used ");
+      toast.error("Error adding customer:", error);
     } finally {
       setIsSaving(false);
       console.log("Saving state reset");

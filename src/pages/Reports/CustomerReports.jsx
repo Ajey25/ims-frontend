@@ -406,14 +406,14 @@ const Reports = () => {
                   <table className="table table-sm table-bordered shadow-sm">
                     <thead className="table-light">
                       <tr>
-                        <th>OnRent No</th>
-                        <th>OnRent Date</th>
+                        <th>On Rent No</th>
+                        <th>On Rent Date</th>
                         <th>Item Name</th>
                         <th>UOM</th>
                         <th>Total Qty</th>
                         <th>Return Qty</th>
                         <th>Balance Qty</th>
-                        <th>OnRentReturn Date</th>
+                        <th>Return Date</th>
                         <th>Per Day Rate</th>
                         <th>Used Days</th>
                         <th>Amount</th>

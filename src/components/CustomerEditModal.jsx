@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Form } from "react-bootstrap";
+import debounce from "lodash/debounce"; // Import debounce
 
 const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
   const [customerName, setCustomerName] = useState("");
@@ -11,6 +12,8 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
   const [address, setAddress] = useState("");
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("active");
+  const [emailError, setEmailError] = useState({ message: "", color: "" });
+  const [emailValid, setEmailValid] = useState(null); // true | false | null
 
   useEffect(() => {
     if (customer) {
@@ -34,6 +37,39 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.(com|org|net|edu|gov|in)$/i;
     return re.test(email);
+  };
+  const checkEmailExists = debounce(async (email) => {
+    try {
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/customerMaster/check/email?email=${email}`
+      );
+      const data = await response.json();
+      if (data.exists) {
+        setEmailError({
+          message: "Email already in use",
+          color: "text-danger",
+        });
+        setEmailValid(false);
+      } else {
+        setEmailError({ message: "Email is available", color: "text-success" });
+        setEmailValid(true);
+      }
+    } catch (error) {
+      setEmailError({ message: "Error checking email", color: "text-danger" });
+      setEmailValid(false);
+    }
+  }, 500);
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value.trim();
+    setEmail(value);
+    if (value) {
+      checkEmailExists(value); // Call debounced function
+    } else {
+      setEmailError(""); // Clear email error if email is empty
+    }
   };
 
   const validateMobile = (mobile) => {
@@ -121,7 +157,9 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
-
+    if (!emailValid) {
+      return;
+    }
     const newCustomer = {
       id: customer?.id,
       customerName,
@@ -207,19 +245,21 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
               type="text"
               className={`form-control ${errors.email ? "is-invalid" : ""}`}
               value={email}
-              placeholder="enter email address"
+              placeholder="Enter email address"
               onKeyDown={(e) => {
                 if (e.key === " ") {
                   e.preventDefault();
                 }
               }}
-              onChange={(e) => {
-                let value = e.target.value.replace(/\s/g, ""); // Removes all spaces
-                setEmail(value);
-              }}
+              onChange={handleEmailChange} // Use the debounced email change handler
             />
             {errors.email && (
               <div className="invalid-feedback">{errors.email}</div>
+            )}
+            {emailError.message && (
+              <div className={`form-text ${emailError.color}`}>
+                {emailError.message}
+              </div>
             )}
           </div>
 
@@ -347,7 +387,7 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
           </div>
         </div>
 
-        <div className="d-flex justify-content-end gap-2">
+        <div className="d-flex justify-content-center gap-2">
           <button type="submit" className="btn btn-primary" disabled={isSaving}>
             {isSaving
               ? customer
@@ -355,7 +395,7 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
                 : "Saving..."
               : customer
               ? "Update"
-              : "Save"}
+              : "Save Customer"}
           </button>
         </div>
       </form>

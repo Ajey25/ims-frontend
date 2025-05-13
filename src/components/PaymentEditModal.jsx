@@ -796,10 +796,7 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
           )
         )}
 
-        <div className="d-flex gap-2 justify-content-end mt-4">
-          <Button variant="secondary" onClick={onClose} type="button">
-            Cancel
-          </Button>
+        <div className="d-flex gap-2 justify-content-center mt-4">
           <Button variant="primary" type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Saving..." : "Save Payment"}
           </Button>
