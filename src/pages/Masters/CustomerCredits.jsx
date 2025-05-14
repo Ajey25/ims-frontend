@@ -158,6 +158,28 @@ const CustomerCredits = () => {
       <div className="card p-4">
         <div className="row">
           <div className="col-md-4 mb-3">
+            <strong>Payment Date</strong>
+            <div className="datepicker-wrapper position-relative">
+              <DatePicker
+                selected={paymentDate}
+                onChange={handleDateChange}
+                dateFormat="dd/MM/yyyy"
+                className="form-control date"
+                placeholderText="dd/mm/yyyy"
+                onChangeRaw={handleDateChangeRaw}
+              />
+              <FaCalendarAlt
+                className="calendar-icon"
+                onClick={() =>
+                  document.querySelector(".datepicker-wrapper input").focus()
+                }
+              />
+            </div>
+            {errors.paymentDate && (
+              <div className="text-danger small mt-1">{errors.paymentDate}</div>
+            )}
+          </div>
+          <div className="col-md-4 mb-3">
             <strong>Customer Name</strong>
             <Select
               options={customerOptions}
@@ -181,20 +203,6 @@ const CustomerCredits = () => {
           </div>
 
           <div className="col-md-4 mb-3">
-            <strong>Amount</strong>
-            <input
-              type="number"
-              className={`form-control ${errors.amount ? "is-invalid" : ""}`}
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="Enter amount"
-            />
-            {errors.amount && (
-              <div className="invalid-feedback">{errors.amount}</div>
-            )}
-          </div>
-
-          <div className="col-md-4 mb-3">
             <strong>Payment Type</strong>
             <Select
               options={paymentOptions}
@@ -208,31 +216,20 @@ const CustomerCredits = () => {
               <div className="text-danger small mt-1">{errors.paymentType}</div>
             )}
           </div>
-
-          <div className="col-md-4 mb-3">
-            <strong>Payment Date</strong>
-            <div className="datepicker-wrapper position-relative">
-              <DatePicker
-                selected={paymentDate}
-                onChange={handleDateChange}
-                dateFormat="dd/MM/yyyy"
-                className="form-control date"
-                placeholderText="dd/mm/yyyy"
-                onChangeRaw={handleDateChangeRaw}
-              />
-              <FaCalendarAlt
-                className="calendar-icon"
-                onClick={() =>
-                  document.querySelector(".datepicker-wrapper input").focus()
-                }
-              />
-            </div>
-            {errors.paymentDate && (
-              <div className="text-danger small mt-1">{errors.paymentDate}</div>
-            )}
-          </div>
         </div>
-
+        <div className="col-md-4 mb-3">
+          <strong>Amount</strong>
+          <input
+            type="number"
+            className={`form-control ${errors.amount ? "is-invalid" : ""}`}
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="Enter amount"
+          />
+          {errors.amount && (
+            <div className="invalid-feedback">{errors.amount}</div>
+          )}
+        </div>
         <div className="text-center mt-2">
           <button className="btn btn-primary" onClick={handleSave}>
             Save Credits
