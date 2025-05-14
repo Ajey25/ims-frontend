@@ -532,9 +532,6 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
               ? "Update"
               : "Save Customer"}
           </button>
-          <button type="button" className="btn btn-secondary" onClick={onClose}>
-            Cancel
-          </button>
         </div>
       </form>
     </div>
