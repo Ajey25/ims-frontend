@@ -226,7 +226,7 @@ const ItemMaster = () => {
               <th>Sr No.</th>
               <th>Item Name</th>
               <th>Item Code</th>
-              <th>Description</th>
+              <th style={{ width: "30%" }}>Description</th>
               <th>Status</th>
               <th>Created By</th>
               <th>Created At</th>
