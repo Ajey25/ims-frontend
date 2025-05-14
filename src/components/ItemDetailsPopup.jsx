@@ -14,7 +14,7 @@ const ItemDetailsPopup = ({ item, onClose }) => {
           </button>
         </div>
 
-        <div className="card box-shadow shadow-sm">
+        <div className="card box-shadow shadow-sm text-break">
           <div className="card-body">
             <div className="row">
               {[

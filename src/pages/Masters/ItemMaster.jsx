@@ -240,7 +240,7 @@ const ItemMaster = () => {
                   <td>{startIndex + index + 1}</td>
                   <td>{item.itemName}</td>
                   <td>{item.itemCode}</td>
-                  <td>{item.description}</td>
+                  <td className="text-break">{item.description}</td>
                   <td>
                     <span
                       className={`badge ${

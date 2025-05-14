@@ -36,7 +36,7 @@ const PaymentDetails = ({ payment, onClose }) => {
         </button>
       </div>
 
-      <div className="card shadow-sm mb-4">
+      <div className="card shadow-sm mb-4 text-break">
         <div className="card-body">
           <div className="row g-3">
             {[

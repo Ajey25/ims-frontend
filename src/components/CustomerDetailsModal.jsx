@@ -54,7 +54,7 @@ const CustomerDetailsModal = ({ customer, onClose }) => {
       </div>
 
       <div className="card">
-        <div className="card-body">
+        <div className="card-body text-break">
           <div className="row">
             {[
               // Display customer details

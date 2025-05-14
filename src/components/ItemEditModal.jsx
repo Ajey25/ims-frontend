@@ -55,6 +55,8 @@ const ItemEditModal = ({ item, onSave, onClose, isSaving }) => {
       tempErrors.description = "Description is required.";
     } else if (description.length < 4) {
       tempErrors.description = "Description should be at least 4 characters.";
+    } else if (description.length > 40) {
+      tempErrors.description = "Description should not exceed 40 characters.";
     }
 
     if (!status) {
