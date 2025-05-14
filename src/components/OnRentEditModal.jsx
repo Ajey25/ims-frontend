@@ -410,6 +410,7 @@ const OnRentEditModal = ({ onRent, onSave, onClose, isSaving }) => {
   const customerOptionsFormatted = customerOptions.map((customer) => ({
     value: customer.id,
     label: customer.customerName,
+    // label: `${customer.customerName} - ${customer.email}`,
   }));
 
   // This was initializing the initialQtyMap only once on component mount

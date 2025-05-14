@@ -725,6 +725,7 @@ const OnRentReturnEditModal = ({ orr, onSave, onClose, isSaving }) => {
   const customerOptionsFormatted = customerMaster.map((customer) => ({
     value: customer.id,
     label: customer.customerName,
+    // label: `${customer.customerName} - ${customer.email}`,
   }));
 
   return (

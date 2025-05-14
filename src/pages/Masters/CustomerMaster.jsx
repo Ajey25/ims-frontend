@@ -88,7 +88,7 @@ const CustomerMaster = () => {
 
   const handleEditCustomer = async (updatedCustomer) => {
     setIsSaving(true);
-
+    console.log("Saving state set to true");
     try {
       const customerId = updatedCustomer.id;
       const token = localStorage.getItem("token");

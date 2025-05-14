@@ -467,6 +467,7 @@ const PaymentEditModal = ({ onSave, onClose, isSaving }) => {
   const customerOptionsFormatted = customers.map((customer) => ({
     value: customer.id,
     label: customer.customerName,
+    // label: `${customer.customerName} - ${customer.email}`,
   }));
   const handleChange = (selectedOption) => {
     if (selectedOption) {

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Form } from "react-bootstrap";
-import debounce from "lodash/debounce"; // Import debounce
+import debounce from "lodash/debounce";
+import { set } from "lodash";
 
 const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
   const [customerName, setCustomerName] = useState("");
@@ -13,22 +14,42 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("active");
   const [emailError, setEmailError] = useState({ message: "", color: "" });
-  const [emailValid, setEmailValid] = useState(null); // true | false | null
+  const [emailValid, setEmailValid] = useState(null);
+  const [initialEmail, setInitialEmail] = useState(""); // Track initial email for edits
+  const [customerNameError, setCustomerNameError] = useState({
+    message: "",
+    color: "",
+  });
+  const [customerNameValid, setCustomerNameValid] = useState(null);
+  const [initialCustomerName, setInitialCustomerName] = useState("");
 
   useEffect(() => {
     if (customer) {
       setCustomerName(customer.customerName);
+      setInitialCustomerName(customer.customerName); // Store initial name for comparison
       setEmail(customer.email);
+      setInitialEmail(customer.email); // Store initial email for comparison
       setMobile(customer.mobile);
-      setGst(customer.gst);
-      setPan(customer.pan);
+      setGst(customer.gst || "");
+      setPan(customer.pan || "");
       setAddress(customer.address || "");
       setStatus(customer.isActive ? "active" : "inactive");
+
+      // If we're editing an existing customer, consider the email valid
+      // until it's changed
+      setEmailValid(true);
+      setCustomerNameValid(true);
+    } else {
+      // For new customer, reset fields
+      setInitialEmail("");
+      setCustomerName("");
+      setEmailValid(null);
+      setCustomerNameValid(null);
     }
   }, [customer]);
 
   const validateCustomerName = (name) => {
-    const re = /^[a-zA-Z0-9 _-]+$/; // Still allows alphanumerics, _ and -
+    const re = /^[a-zA-Z0-9 _-]+$/;
     return re.test(name);
   };
 
@@ -38,7 +59,15 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
     const re = /^[^\s@]+@[^\s@]+\.(com|org|net|edu|gov|in)$/i;
     return re.test(email);
   };
+
   const checkEmailExists = debounce(async (email) => {
+    // Skip check if email hasn't changed in edit mode
+    if (customer && email === initialEmail) {
+      setEmailValid(true);
+      setEmailError({ message: "", color: "" });
+      return;
+    }
+
     try {
       const response = await fetch(
         `${
@@ -57,18 +86,88 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
         setEmailValid(true);
       }
     } catch (error) {
+      console.error("Error checking email:", error);
       setEmailError({ message: "Error checking email", color: "text-danger" });
       setEmailValid(false);
+    }
+  }, 500);
+
+  const checkCustomerNameExists = debounce(async (name) => {
+    // Skip check if name hasn't changed in edit mode
+    if (customer && name === initialCustomerName) {
+      setCustomerNameValid(true);
+      setCustomerNameError({ message: "", color: "" });
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/customerMaster/check/name?name=${name}`
+      );
+      const data = await response.json();
+
+      if (data.exists) {
+        setCustomerNameError({
+          message: "This Customer Name is already taken.",
+          color: "text-danger",
+        });
+        setCustomerNameValid(false);
+      } else {
+        setCustomerNameError({
+          message: "Customer name is available",
+          color: "text-success",
+        });
+        setCustomerNameValid(true);
+      }
+    } catch (error) {
+      console.error("Error checking customer name:", error);
+      setCustomerNameError({
+        message: "Error checking customer name",
+        color: "text-danger",
+      });
+      setCustomerNameValid(false);
     }
   }, 500);
 
   const handleEmailChange = (e) => {
     const value = e.target.value.trim();
     setEmail(value);
+
     if (value) {
-      checkEmailExists(value); // Call debounced function
+      if (validateEmail(value)) {
+        checkEmailExists(value);
+      } else {
+        setEmailError({
+          message: "Invalid email format",
+          color: "text-danger",
+        });
+        setEmailValid(false);
+      }
     } else {
-      setEmailError(""); // Clear email error if email is empty
+      setEmailError({ message: "", color: "" });
+      setEmailValid(null);
+    }
+  };
+
+  const handleCustomerNameChange = (e) => {
+    const value = e.target.value.trim();
+    setCustomerName(value);
+
+    if (value) {
+      if (validateCustomerName(value)) {
+        checkCustomerNameExists(value);
+      } else {
+        setCustomerNameError({
+          message: "Customer name must be at least 3 characters",
+          color: "text-danger",
+        });
+        setCustomerNameValid(false);
+      }
+    } else {
+      setCustomerNameError({ message: "", color: "" });
+      setCustomerNameValid(null);
     }
   };
 
@@ -156,10 +255,23 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validate()) return;
-    if (!emailValid) {
+    console.log("Submit button clicked");
+
+    if (!validate()) {
+      console.log("Validation failed");
       return;
     }
+
+    // Skip email validation check if we're editing and email hasn't changed
+    if (email !== initialEmail && !emailValid) {
+      console.log("Email validation failed");
+      return;
+    }
+    if (customerName !== initialCustomerName && !customerNameValid) {
+      console.log("Customer name validation failed");
+      return;
+    }
+
     const newCustomer = {
       id: customer?.id,
       customerName,
@@ -170,14 +282,15 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
       address,
       isActive: status === "active",
     };
+
+    console.log("Customer data being saved:", newCustomer);
     onSave(newCustomer);
-    onClose();
   };
 
   // Handle input changes with validation
   const handleGSTChange = (e) => {
     const value = e.target.value.toUpperCase();
-    const sanitizedValue = value.replace(/[^A-Z0-9]/g, ""); // Removes special characters and spaces
+    const sanitizedValue = value.replace(/[^A-Z0-9]/g, "");
     if (sanitizedValue.length <= 15) {
       setGst(sanitizedValue);
     }
@@ -185,7 +298,7 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
 
   const handlePANChange = (e) => {
     const value = e.target.value.toUpperCase();
-    const sanitizedValue = value.replace(/[^A-Z0-9]/g, ""); // Removes special characters and spaces
+    const sanitizedValue = value.replace(/[^A-Z0-9]/g, "");
     if (sanitizedValue.length <= 10) {
       setPan(sanitizedValue);
     }
@@ -217,23 +330,36 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
               type="text"
               placeholder="Please enter customer name"
               className={`form-control ${
-                errors.customerName ? "is-invalid" : ""
+                customerNameValid === false
+                  ? "is-invalid"
+                  : customerNameValid === true
+                  ? "is-valid"
+                  : ""
               }`}
               value={customerName}
+              disabled={!!customer}
               onChange={(e) => {
                 const value = e.target.value;
                 if (/^[a-zA-Z0-9-_ ]*$/.test(value)) {
-                  setCustomerName(value);
+                  handleCustomerNameChange(e); // Call the logic from your previous function
                 }
               }}
               onKeyDown={(e) => {
                 if (e.key === " " && e.target.value.length === 0) {
-                  e.preventDefault(); // Prevent starting with space
+                  e.preventDefault(); // prevent space as first character
                 }
               }}
             />
-            {errors.customerName && (
-              <div className="invalid-feedback">{errors.customerName}</div>
+
+            {/* Show validation messages */}
+            {customerNameError.message && (
+              <div
+                className={`${
+                  customerNameValid ? "valid-feedback" : "invalid-feedback"
+                }`}
+              >
+                {customerNameError.message}
+              </div>
             )}
           </div>
 
@@ -243,21 +369,30 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
             </label>
             <input
               type="text"
-              className={`form-control ${errors.email ? "is-invalid" : ""}`}
-              value={email}
               placeholder="Enter email address"
+              className={`form-control ${
+                emailValid === false
+                  ? "is-invalid"
+                  : emailValid === true
+                  ? "is-valid"
+                  : ""
+              }`}
+              value={email}
+              onChange={handleEmailChange}
               onKeyDown={(e) => {
                 if (e.key === " ") {
-                  e.preventDefault();
+                  e.preventDefault(); // prevent space
                 }
               }}
-              onChange={handleEmailChange} // Use the debounced email change handler
             />
-            {errors.email && (
-              <div className="invalid-feedback">{errors.email}</div>
-            )}
+
+            {/* Show validation messages */}
             {emailError.message && (
-              <div className={`form-text ${emailError.color}`}>
+              <div
+                className={`${
+                  emailValid ? "valid-feedback" : "invalid-feedback"
+                }`}
+              >
                 {emailError.message}
               </div>
             )}
@@ -334,11 +469,11 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
                 transition: "background-color 0.3s ease",
                 fontSize: "12px",
                 fontWeight: "600",
-                cursor: "pointer", // Add pointer to indicate interaction
+                cursor: "pointer",
               }}
               onClick={() =>
                 setStatus(status === "active" ? "inactive" : "active")
-              } // Allow div click to toggle
+              }
             >
               <span
                 className="position-absolute"
@@ -375,7 +510,7 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
                   setStatus(status === "active" ? "inactive" : "active")
                 }
                 className="position-absolute w-100 h-100 opacity-0"
-                tabIndex="-1" // Prevent accidental focus on hidden input
+                tabIndex="-1"
               />
             </div>
 
@@ -397,6 +532,9 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
               ? "Update"
               : "Save Customer"}
           </button>
+          <button type="button" className="btn btn-secondary" onClick={onClose}>
+            Cancel
+          </button>
         </div>
       </form>
     </div>
@@ -407,6 +545,7 @@ CustomerEditModal.propTypes = {
   customer: PropTypes.object,
   onSave: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  isSaving: PropTypes.bool,
 };
 
 export default CustomerEditModal;
