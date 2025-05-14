@@ -226,7 +226,7 @@ const ItemMaster = () => {
               <th>Sr No.</th>
               <th>Item Name</th>
               <th>Item Code</th>
-              <th style={{ width: "40%" }}>Description</th>
+              <th>Description</th>
               <th>Status</th>
               <th>Created By</th>
               <th>Created At</th>
@@ -240,7 +240,7 @@ const ItemMaster = () => {
                   <td>{startIndex + index + 1}</td>
                   <td>{item.itemName}</td>
                   <td>{item.itemCode}</td>
-                  <td className="text-break">{item.description}</td>
+                  <td className="">{item.description}</td>
                   <td>
                     <span
                       className={`badge ${
