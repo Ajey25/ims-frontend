@@ -135,40 +135,57 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
     const value = e.target.value.trim();
     setEmail(value);
 
-    if (value) {
-      if (validateEmail(value)) {
-        checkEmailExists(value);
-      } else {
-        setEmailError({
-          message: "Invalid email format",
-          color: "text-danger",
-        });
-        setEmailValid(false);
-      }
-    } else {
-      setEmailError({ message: "", color: "" });
-      setEmailValid(null);
+    if (!value) {
+      setEmailError({ message: "Email is required", color: "text-danger" });
+      setEmailValid(false);
+      return;
     }
+
+    if (!validateEmail(value)) {
+      setEmailError({
+        message: "Invalid email format (e.g. user@example.com)",
+        color: "text-danger",
+      });
+      setEmailValid(false);
+      return;
+    }
+
+    checkEmailExists(value);
   };
 
   const handleCustomerNameChange = (e) => {
     const value = e.target.value.trim();
     setCustomerName(value);
 
-    if (value) {
-      if (validateCustomerName(value)) {
-        checkCustomerNameExists(value);
-      } else {
-        setCustomerNameError({
-          message: "Customer name must be at least 3 characters",
-          color: "text-danger",
-        });
-        setCustomerNameValid(false);
-      }
-    } else {
-      setCustomerNameError({ message: "", color: "" });
-      setCustomerNameValid(null);
+    if (!value) {
+      setCustomerNameError({
+        message: "Customer Name is required",
+        color: "text-danger",
+      });
+      setCustomerNameValid(false);
+      return;
     }
+
+    if (value.length < 3) {
+      setCustomerNameError({
+        message: "Customer name must be at least 3 characters",
+        color: "text-danger",
+      });
+      setCustomerNameValid(false);
+      return;
+    }
+
+    if (!validateCustomerName(value)) {
+      setCustomerNameError({
+        message: "Only letters, numbers, space, - and _ are allowed",
+        color: "text-danger",
+      });
+      setCustomerNameValid(false);
+      return;
+    }
+
+    // Only check if it passed all above
+    checkCustomerNameExists(value);
   };
 
   const validateMobile = (mobile) => {
@@ -187,6 +204,19 @@ const CustomerEditModal = ({ customer, onSave, onClose, isSaving }) => {
   };
 
   const validate = () => {
+    // Trigger error messages if not already triggered
+    if (!customerName.trim()) {
+      setCustomerNameError({
+        message: "Customer Name is required",
+        color: "text-danger",
+      });
+      setCustomerNameValid(false);
+    }
+    if (!email.trim()) {
+      setEmailError({ message: "Email is required", color: "text-danger" });
+      setEmailValid(false);
+    }
+
     let tempErrors = {};
 
     if (!customerName.trim()) {
